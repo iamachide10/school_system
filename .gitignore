@@ -1,0 +1,48 @@
+# Node dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Temporary files
+.tmp/
+temp/
+*.tmp
+*.log
+
+# Editor & system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+.next/
+.nuxt/
+
+# TypeScript
+*.tsbuildinfo
+
+# React
+*.eslintcache
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
+
+# Misc
+coverage/

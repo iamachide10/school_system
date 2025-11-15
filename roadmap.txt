@@ -1,0 +1,322 @@
+
+## 🧱 **WEEK 2: Database Models + User System (Backend First, Simple Frontend Forms)**
+
+
+### **Day 9 – Build `userModel.js`**
+
+* Functions: `createUser`, `getUserByEmail`, etc.
+* Use parameterized queries.
+
+### **Day 10 – `userController.js`**
+
+* Create `registerUser` and `loginUser` endpoints.
+* Use bcrypt for password hashing and JWT for login.
+
+### **Day 11 – Add Auth Routes**
+
+* `/routes/userRoutes.js`
+* `/auth/register`, `/auth/login`
+* Test using Postman.
+
+### **Day 12 – Connect Frontend (Login & Register Pages)**
+
+* Create `Login.jsx` and `Register.jsx`.
+* Use `fetch()` to call backend.
+* Test login/register flow.
+
+### **Day 13 – AuthContext**
+
+* Create `AuthContext.js` to store logged-in user data globally.
+* Redirect based on role after login.
+
+### **Day 14 – Review & Test**
+
+* Make sure users can register, login, and view role dashboard placeholders (Teacher, Driver, etc).
+
+---
+
+## 🧩 **WEEK 3: Classes and Students**
+
+### **Day 15 – Backend: Class Model & Controller**
+
+* Add CRUD: create class, get all classes, update, delete.
+* Test in Postman.
+
+### **Day 16 – Frontend: Class Management UI (Teacher/Admin view)**
+
+* Simple form to add a class and display list of classes.
+
+### **Day 17 – Backend: Student Model & Controller**
+
+* CRUD for students.
+* Ensure `class_id` foreign key is working.
+
+### **Day 18 – Frontend: Add Student Form**
+
+* Page for teacher to add students.
+* Fetch and display all students per class.
+
+### **Day 19 – Connect Students with Classes**
+
+* When adding a student, allow class selection via dropdown.
+
+### **Day 20 – Testing Day**
+
+* Test adding class → adding student → viewing them.
+
+### **Day 21 – Fixes & Styling**
+
+* Make class and student tables look clean with Tailwind.
+
+---
+
+## 💰 **WEEK 4: Canteen Records (Unmerged + Merged logic start)**
+
+### **Day 22 – Backend: Canteen Model**
+
+* `recordModel.js` for CRUD.
+* `status` default = "unmerged".
+
+### **Day 23 – Backend: Record Controller**
+
+* `createRecord` (for bus driver/teacher).
+* `getRecordsByClass`, `updateRecordStatus`.
+
+### **Day 24 – Frontend: Payment Input UI (Bus Driver)**
+
+* Create form: select class → select student → enter amount → submit.
+* Send POST request using `fetch()` to backend.
+
+### **Day 25 – Teacher Dashboard: Fetch Unmerged Records**
+
+* Fetch unmerged records for the teacher’s class.
+* Display them in a table.
+
+### **Day 26 – Merge Button**
+
+* Add button to update record status from `"unmerged"` → `"merged"`.
+* Send PUT request via fetch.
+
+### **Day 27 – Display Merged Records**
+
+* Separate “Merged” and “Unmerged” tables for clarity.
+
+### **Day 28 – Review + Test**
+
+* Test: Bus driver records → Teacher merges → Works?
+
+---
+
+## 💼 **WEEK 5: Accountant Dashboard (Verification)**
+
+### **Day 29 – Backend: Accountant Routes**
+
+* Endpoint to get all merged totals per class.
+* Endpoint to mark a class as verified.
+
+### **Day 30 – Frontend: Accountant Dashboard**
+
+* Show table of all classes with totals.
+* Add “Verify” button (update backend).
+
+### **Day 31 – Compute System Total**
+
+* Show “Total of All Classes” at bottom of accountant page.
+
+### **Day 32 – Frontend: Filter by Verified/Unverified**
+
+* Add filter buttons.
+
+### **Day 33 – Backend Optimization**
+
+* Join tables (records + students + classes) to display readable data.
+
+### **Day 34 – Test Entire Chain**
+
+* Bus driver → teacher merge → accountant verify.
+
+### **Day 35 – Styling & Clean-Up**
+
+* Make dashboard presentable.
+
+---
+
+## 👑 **WEEK 6: Headmaster Dashboard (View-Only Reports)**
+
+### **Day 36 – Backend: Summary Route**
+
+* Endpoint to get:
+
+  * total merged/unmerged
+  * class totals
+  * verification status
+
+### **Day 37 – Frontend: Headmaster Page**
+
+* Show simple analytics with tables or cards.
+
+### **Day 38 – Add Charts (optional with Chart.js or Recharts)**
+
+* Visualize merged vs unmerged totals.
+
+### **Day 39 – PDF/CSV Export**
+
+* Use browser print/download for now.
+
+### **Day 40 – End-to-End Testing**
+
+* Ensure all roles work together.
+
+### **Day 41 – Fix Bugs**
+
+* Handle empty states, wrong inputs, etc.
+
+---
+
+## 📊 **WEEK 7: Authentication, Protection & Navigation**
+
+### **Day 42 – Backend: Auth Middleware**
+
+* JWT verification.
+* Protect all role-based routes.
+
+### **Day 43 – Frontend: Protected Routes**
+
+* Redirect unauthenticated users to Login.
+
+### **Day 44 – Role Middleware**
+
+* Only accountants can verify, etc.
+
+### **Day 45 – Navigation Bar**
+
+* Show links based on role.
+
+### **Day 46 – Logout Feature**
+
+* Clear AuthContext + localStorage.
+
+### **Day 47 – Styling Polish**
+
+* Add consistent layout.
+
+### **Day 48 – Test All Logins**
+
+* Teacher, Bus Driver, Accountant, Headmaster.
+
+---
+
+## 📅 **WEEK 8: Reports, Filtering & Analytics**
+
+### **Day 49 – Backend: Daily/Weekly Summary**
+
+* Route with date filters for records.
+
+### **Day 50 – Frontend: Filter by Date**
+
+* Input field for start & end dates → fetch filtered data.
+
+### **Day 51 – Add Search Bar**
+
+* Search students by name in teacher dashboard.
+
+### **Day 52 – Add Totals by Role**
+
+* Bus driver dashboard shows his personal collected total.
+
+### **Day 53 – Add Status Color Coding**
+
+* Green for merged, yellow for unmerged, etc.
+
+### **Day 54 – Data Validation**
+
+* Prevent empty submissions or duplicates.
+
+### **Day 55 – Full Test Run**
+
+* Try end-to-end again.
+
+---
+
+## 📲 **WEEK 9: Deployment Preparation**
+
+### **Day 56 – Environment Setup**
+
+* Add `.env` for both frontend and backend (production URLs).
+
+### **Day 57 – Seed Sample Data**
+
+* Add seed users (teacher, driver, etc).
+
+### **Day 58 – Deploy Backend**
+
+* Use Render or Railway for Express + PostgreSQL.
+
+### **Day 59 – Deploy Frontend**
+
+* Use Netlify or Vercel, link to backend API.
+
+### **Day 60 – Connect Production URLs**
+
+* Test online connection.
+
+### **Day 61 – Fix Bugs from Deployment**
+
+* Handle CORS and environment path issues.
+
+### **Day 62 – Confirm Everything Works Online**
+
+* Log in from mobile and desktop.
+
+---
+
+## 🧠 **WEEK 10: Advanced Features (Optional / Future)**
+
+### **Day 63 – Add Parent Notification Placeholder**
+
+* Console log “Parent notified” for now.
+
+### **Day 64 – Add Offline USSD Mock Route**
+
+* `/ussd/simulate` – simulate simple recording.
+
+### **Day 65 – Add Audit Logs**
+
+* Create table `activity_logs`.
+
+### **Day 66 – Create Report Export API**
+
+* `/reports/daily` returns CSV.
+
+### **Day 67 – Add Confirmation Modals**
+
+* Confirm before merging/deleting.
+
+### **Day 68 – Add Loading States and Error UI**
+
+* Simple “Loading…” or “Error” messages.
+
+### **Day 69 – Clean and Comment Code**
+
+* Add documentation inside code files.
+
+### **Day 70 – Final Test & Celebrate 🎉**
+
+* Full system walkthrough.
+* Prepare short demo video (optional).
+
+---
+
+## ⚙️ **Final Tools & Practices**
+
+* Use `fetch()` for all API calls.
+* Keep frontend and backend running side by side:
+
+  * Backend: `npm start` (port 5000)
+  * Frontend: `npm start` (port 3000)
+* Commit code every few days.
+* Test each new endpoint immediately after creation.
+
+---
+
+Would you like me to convert this roadmap into a **daily checklist table (Day | Task | Frontend | Backend | Goal)** format so you can track your progress easily while building?
