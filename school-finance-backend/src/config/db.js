@@ -30,6 +30,4 @@ try{
 
 export default pool 
 
-
-
- 
+                                                    
