@@ -1,27 +1,23 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js"
-
+import classRoutes from "./routes/classRoutes.js"
+import { errorHandler } from "./middleware/errorHandler.js";
 import cors from "cors"
 import pool from "./config/db.js";
+import studentRoute from "./routes/studentRoute.js"
 
 
 const app=express();
 
 app.use(cors())
 app.use(express.json())
+app.use(errorHandler)
+
 
 
 app.use("/api/users", userRoutes)
-
-app.get("/" , async(req,res)=>{
-    try{
-        const result = await pool.query("SELECT name,password ,email FROM users")
-        res.json(result.rows)
-    }catch(e){
-        console.log(e);
-    }
-})
-
+app.use("/api/classes", classRoutes)
+app.use("/api/student",studentRoute)
 
 
 export default app

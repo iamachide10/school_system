@@ -1,21 +1,50 @@
 import React from "react";
 import { useState } from "react";
+import { useAuth } from "../context/authContext";
+import { useCLassContext } from "../context/classContext";
+
+
 export default function LoginForm() {
     const [email, setEmail]=useState("")
     const [password,setPassword]=useState("")
-  
 
-  const handleSubmit=(e)=>{
-        e.preventDefault()
+
+    const {login}=useAuth()
+    const {storeClasses}=useCLassContext()
+
+  const handleSubmit=async(e)=>{
+        e.preventDefault()  
+
+
+       
+            
         if( !email || !password ) return alert("Fill all options")
         const data={
             email,
             password,
         } 
-        alert("working")
 
-        console.log(data);
 
+        const url = "http://localhost:5001/api/users/login"
+        const option ={
+          method:"POST" ,
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({data})
+        } 
+        try{
+          const res= await fetch(url ,option)
+          const data=await res.json()
+          if(res.ok){
+            login(data)
+           console.log("Data", data);
+            window.location.href="/classes"
+          }
+
+        }catch(e){
+          console.log(e);
+        }
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-white p-4">
@@ -58,7 +87,7 @@ export default function LoginForm() {
 
         <p className="text-center text-sm text-gray-600">
           Don't have an account?{' '}
-          <a href="#" className="text-green-700 font-semibold hover:underline">
+          <a href="/signup" className="text-green-700 font-semibold hover:underline">
             Sign Up
           </a>
         </p>

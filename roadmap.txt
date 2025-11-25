@@ -8,12 +8,11 @@
 * Use parameterized queries.
 
 ### **Day 10 – `userController.js`**
-
 * Create `registerUser` and `loginUser` endpoints.
 * Use bcrypt for password hashing and JWT for login.
 
-### **Day 11 – Add Auth Routes**
 
+### **Day 11 – Add Auth Routes**
 * `/routes/userRoutes.js`
 * `/auth/register`, `/auth/login`
 * Test using Postman.
@@ -25,12 +24,10 @@
 * Test login/register flow.
 
 ### **Day 13 – AuthContext**
-
 * Create `AuthContext.js` to store logged-in user data globally.
 * Redirect based on role after login.
 
 ### **Day 14 – Review & Test**
-
 * Make sure users can register, login, and view role dashboard placeholders (Teacher, Driver, etc).
 
 ---
