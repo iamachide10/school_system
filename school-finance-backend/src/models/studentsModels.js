@@ -1,0 +1,53 @@
+import pool from "../config/db.js"
+
+
+const createStudentModel=async(full_name,student_code,default_fees,class_id,sequence)=>{
+try{
+    const result = await pool.query("INSERT INTO students (full_name,student_code,default_fees,class_id,sequence)\
+         VALUES($1,$2,$3,$4,$5) RETURNING *", [full_name,student_code,default_fees,class_id,sequence])
+         return result.rows[0]
+}catch(e){
+    console.log(e);
+    }
+}
+
+export default createStudentModel
+
+export const getStudentsModel=async(class_id)=>{
+try{
+    const result = await pool.query("SELECT * FROM students WHERE class_id = $1",[class_id])
+    return result.rows
+}catch(e){
+    console.log(e);
+    }
+}
+
+export const getAllStudents=async()=>{
+    const result =await pool.query("SELECT * FROM students" ) 
+    //  const results =await pool.query("SELECT MAX(sequence) AS lastSeq FROM students WHERE class_id=$1 " ,[40.00])
+    // console.log(result.rows);
+    // console.log("sequence" ,parseInt(results.rows[0].lastseq) +2 );
+    return result.rows
+
+}
+
+export const getHeighestSeq=async(id)=>{
+    const result =await pool.query("SELECT MAX(sequence) AS lastSeq FROM students WHERE class_id=$1 " ,[id])    
+    console.log((parseInt(result.rows[0].lastseq) ||0));
+    return (parseInt(result.rows[0].lastseq)||0) + 1    
+    
+}
+
+
+
+
+
+export const getClassStudentsModel=async (id)=>{
+   try{
+       const result =await pool.query("SELECT * FROM students WHERE class_id = $1",[id])
+       return result.rows
+
+   }catch(e){
+       console.log(e)
+   } 
+}

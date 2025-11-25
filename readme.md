@@ -173,7 +173,7 @@ CREATE TABLE canteen_records (
 5. The class total updates automatically.
 
 ---
-
+ 
 ### **Scenario 3 – Direct Payment to Teacher**
 
 1. Student “Kojo” hands money directly to the teacher.
@@ -211,7 +211,7 @@ CREATE TABLE canteen_records (
 school-canteen-system/
 ├── backend/
 │   ├── config/
-│   │   └── db.js           # Database connection setup
+│   │   └── db.js      #Database connection setup
 │   ├── controllers/
 │   │   ├── studentController.js
 │   │   ├── classController.js
@@ -245,8 +245,6 @@ school-canteen-system/
 │   │   │   ├── DashboardDriver.jsx
 │   │   │   ├── DashboardAccountant.jsx
 │   │   │   └── DashboardHeadmaster.jsx
-│   │   ├── services/
-│   │   │   └── api.js      # axios setup
 │   │   ├── context/
 │   │   │   └── AuthContext.js
 │   │   ├── App.js

@@ -2,7 +2,6 @@ import pg from "pg"
 
 import dotenv from "dotenv";
 
-
 const {Pool}=pg;
 
 dotenv.config()
@@ -21,9 +20,6 @@ const pool = new Pool(credentials)
 try{
     pool.connect()
     console.log("Connected Successfully.")
-    console.log(dotenv);
-    console.log(Pool)
-    
 }catch(error){
     console.error("Database connnection failed :", error)
 }
