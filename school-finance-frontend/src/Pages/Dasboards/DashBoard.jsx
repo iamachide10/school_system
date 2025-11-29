@@ -1,4 +1,4 @@
-import { useAuth } from "../context/authContext"
+import { useAuth } from "../../context/authContext"
 import { useEffect,useState } from "react"
 
 export const DashBoard=()=>{

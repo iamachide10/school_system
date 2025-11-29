@@ -1,15 +1,27 @@
 import { useState ,useEffect} from "react";
-import { useCLassContext } from "../context/classContext";
+
 
 export const AddStudent=()=>{
     const [fullName,setFullName]=useState("")
     const[defaultFee,setDefaultFee]=useState(0)
     const [selectedClassId,setSelectedClass]=useState("")
-
-    const {classes}=useCLassContext()
-
+    const [classes ,setClasses]=useState([])
 
 
+    useEffect(()=>{
+            const getStudentsClasses=async()=>{
+                try{
+                    const request= await fetch("http://localhost:5001/api/classes/getallclasses")
+                    const data= await request.json()
+                    if(request.ok){
+                        setClasses(data.result) 
+                    }
+                }catch(e){
+                    console.log(e);
+                }
+            }
+            getStudentsClasses()
+      },[])
 
     const handleSubmmit=async(e)=>{
 

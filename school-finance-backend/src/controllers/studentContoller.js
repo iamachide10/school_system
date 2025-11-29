@@ -7,6 +7,8 @@ export const createStudentController = async(req,res) =>{
     const {fullName,defaultFee,selectedClassId} = req.body;
   try{
     const classs= await getClassById(selectedClassId)
+    console.log(classs);
+    
     const nextSeq= await getHeighestSeq(selectedClassId)
 
 
@@ -39,18 +41,24 @@ export const getStudentsController=async (req,res)=>{
 
 export const getAllStudentsController=async(req,res)=>{
   const result = getAllStudents()
-  res.json({result})
+  return res.json({result})
 }
+
 
 export const getClassStudentsController=async(req,res)=>{
     const classId = req.params.class_id
 
-    
+    const classs=await getClassById(classId)
+    const {user}=req
+
+    if(user.role!=='teacher' || user.id !==parseInt(classs.teacher_id)){
+      return res.status(400).json({message : "Access denied"})
+    }
 try{
     const result = await getClassStudentsModel(classId)
     return res.status(200).json({result})
 }catch(e){
-    console.log(e);
+    console.log("Error" , e);
 }
 
 }

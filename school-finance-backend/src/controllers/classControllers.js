@@ -18,6 +18,7 @@ export const classCreate=async (req,res)=>{
 export const getAllClassesController=async(req,res)=>{
     try{
         const result = await getAllClassesModel();
+        
         if(result.length===0){
             return res.status(401).json({message:"No classes were found."})
         }

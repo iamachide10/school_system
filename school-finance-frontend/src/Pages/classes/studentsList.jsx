@@ -1,27 +1,39 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { StudentCard } from "../components/studentCard";
+import {StudentCard} from "../../components/studentCard"
+import { useAuth } from "../../context/authContext";
 
 
-export default function ClassDetails() {
+export default function StudentsList() {
   const { id } = useParams();
   const [students, setStudents] = useState([]);
+  const [message,setMessage]=useState("")
 
-  // 📌 TEMP TEST DATA
-  const testStudents = [
-    { _id: "s1", name: "Boss Kyei", studentId: "6001" },
-    { _id: "s2", name: "Ama Boateng", studentId: "6002" },
-    { _id: "s3", name: "Kofi Mensah", studentId: "6003" },
-  ];
+
+
+  const {token}=useAuth()
 
   useEffect(() => {
     const getClassStudents=async()=>{
+      console.log(token);
+      
       try{
-        const res= await fetch(`http://localhost:5001/api/student/get_class_students/${id}`)
+        const res= await fetch(`http://localhost:5001/api/student/get_class_students/${id}` ,
+          { 
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization" :`Bearer ${token}`
+            },
+          }
+        )
         const data= await res.json()
         if(res.ok){
           console.log(data.result); 
           setStudents(data.result)
+        }
+        if(!res.ok){
+          setMessage(data.message)
         }
       }catch(e){
         console.log(e);
@@ -36,6 +48,7 @@ export default function ClassDetails() {
         Students in This Class
       </h1>
 
+      {message && <h1 className="text-3xl font-bold text-red-700 mb-8">{message}</h1>}
       {students.length === 0 && (
         <p className="text-gray-500">No students in this class yet.</p>
       )}

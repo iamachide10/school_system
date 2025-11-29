@@ -1,27 +1,13 @@
 import React, { useEffect } from "react";
-import Navbar from "../components/navBar";
-import { useState } from "react";
-import { useAuth } from "../context/authContext";
 
 
 
 export default function LandingPage() {
-    const [onLog, setOnLog]=useState(false)
-
-  const {user}=useAuth()
-  useEffect(()=>{
-    if(user){
-      setOnLog(true)
-    }else{
-      setOnLog(false)
-    }
-  },[user])
 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 to-white">
       {/* Navbar */}
-      <Navbar isLoggedIn={onLog} />
 
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-6 pt-32">

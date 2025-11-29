@@ -1,5 +1,4 @@
 import { useState ,useEffect} from "react"
-import { useCLassContext } from "../context/classContext"
 
 const SignUp=()=>{
     const [name,setName]=useState("")
@@ -8,10 +7,7 @@ const SignUp=()=>{
     const [role,setRole]=useState("")
     const [selectedClassId ,setSelectedClass]=useState(0)
     const [isTeacher,setIsTeacher]=useState(false)
-
-
-    const {storeClasses,classes}=useCLassContext();
-
+    const [classes,setClasses]=useState([])
 
     useEffect(()=>{
         const getStudentsClasses=async()=>{
@@ -19,8 +15,8 @@ const SignUp=()=>{
                 const request= await fetch("http://localhost:5001/api/classes/getallclasses")
                 const data= await request.json()
                 if(request.ok){
-                    console.log("Data",data.result); 
-                    storeClasses(data.result)
+                    console.log("Data",data.result);
+                    setClasses(data.result) 
                 }
             }catch(e){
                 console.log(e);
