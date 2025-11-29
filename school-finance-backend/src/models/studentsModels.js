@@ -24,15 +24,14 @@ try{
 
 export const getAllStudents=async()=>{
     const result =await pool.query("SELECT * FROM students" ) 
-    //  const results =await pool.query("SELECT MAX(sequence) AS lastSeq FROM students WHERE class_id=$1 " ,[40.00])
-    // console.log(result.rows);
-    // console.log("sequence" ,parseInt(results.rows[0].lastseq) +2 );
     return result.rows
 
 }
 
 export const getHeighestSeq=async(id)=>{
-    const result =await pool.query("SELECT MAX(sequence) AS lastSeq FROM students WHERE class_id=$1 " ,[id])    
+    const result =await pool.query("SELECT MAX(sequence) AS lastSeq FROM students WHERE class_id=$1 " ,[id])   
+    console.log(result);
+     
     console.log((parseInt(result.rows[0].lastseq) ||0));
     return (parseInt(result.rows[0].lastseq)||0) + 1    
     
@@ -44,7 +43,7 @@ export const getHeighestSeq=async(id)=>{
 
 export const getClassStudentsModel=async (id)=>{
    try{
-       const result =await pool.query("SELECT * FROM students WHERE class_id = $1",[id])
+       const result =await pool.query("SELECT * FROM students WHERE class_id = $1  ORDER BY id ASC",[id])
        return result.rows
 
    }catch(e){

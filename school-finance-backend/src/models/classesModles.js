@@ -14,8 +14,9 @@ export const createClass=async(name,  classNumber)=>{
 
 export const getAllClassesModel=async()=>{
     try{
-        const result =await pool.query("SELECT * FROM classes")
+        const result =await pool.query("SELECT * FROM classes ORDER BY id ASC")
         return result.rows
+        
     }catch(e){
         console.log(e);
     }

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { useAuth } from "../context/authContext";
-import { useCLassContext } from "../context/classContext";
+import { useAuth } from "../../context/authContext";
+
 
 
 export default function LoginForm() {
@@ -10,14 +10,9 @@ export default function LoginForm() {
 
 
     const {login}=useAuth()
-    const {storeClasses}=useCLassContext()
 
   const handleSubmit=async(e)=>{
         e.preventDefault()  
-
-
-       
-            
         if( !email || !password ) return alert("Fill all options")
         const data={
             email,
@@ -38,8 +33,7 @@ export default function LoginForm() {
           const data=await res.json()
           if(res.ok){
             login(data)
-           console.log("Data", data);
-            window.location.href="/classes"
+           window.location.href="/classes"
           }
 
         }catch(e){

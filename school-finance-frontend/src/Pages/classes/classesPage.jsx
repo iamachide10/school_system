@@ -1,11 +1,27 @@
 
 import { useEffect, useState } from "react";
-import { ClassCard } from "../components/classCard";
-import { useCLassContext } from "../context/classContext";
+import { ClassCard } from "../../components/classCard";
 
 export  const Classes=()=> {
-  //const [classes, setClasses] = useState([]);
-  const {classes}=useCLassContext();
+  const [classes, setClasses] = useState([]);
+
+  useEffect(()=>{
+    const getAllClasses=async()=>{
+      try{
+
+        const result =await fetch("http://localhost:5001/api/classes/getallclasses")
+  
+        const data = await result.json()
+        if(result.ok){
+          setClasses(data.result)
+        }
+      }catch(e){
+        console.log("Error :" ,e);
+        
+      }
+    }
+    getAllClasses() 
+  },[])
 
 
 

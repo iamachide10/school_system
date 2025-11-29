@@ -19,10 +19,11 @@ export const registerUser=async(req, res)=>{
             console.log(newUser);
             updateTeacherStatus(selectedClassId,newUser.name ,newUser.id)
         }
-        res.status(200).json(newUser)
+
+       return res.status(200).json(newUser)
         
     }catch(e){
-        res.status(500).json({message:`error occured , ${e}`})
+        return res.status(500).json({message:`error occured , ${e}`})
         
     }
 }
@@ -42,7 +43,11 @@ export const logUser =async (req, res)=>{
         if(isValid){
             console.log("User logged in Successfully.");
             console.log(existingUser);
-            const token= createToken({existingUser})
+            const id=existingUser.id
+            const role =existingUser.role
+
+
+            const token= createToken({id,role})
             console.log(token);
             existingUser.token=token
             res.status(200).json({existingUser})
@@ -51,7 +56,7 @@ export const logUser =async (req, res)=>{
         }  
     }catch(e)
     {
-        console.log("An error occured trying to login", e); 
+        console.log("An error occured try to login", e); 
     }
 } 
 
