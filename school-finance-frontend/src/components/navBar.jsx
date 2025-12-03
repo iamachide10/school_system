@@ -15,10 +15,28 @@ const navLinks = {
 };
 
 export default function Navbar({ isLoggedIn }) {
-
   const {logOut ,user} =useAuth()
   const [open, setOpen] = useState(false);
   const linksToShow = isLoggedIn ? navLinks.private : navLinks.public;
+
+  const logOutFunction=async()=>{
+    const url="http://localhost:5001/api/users/logout"
+    const options={
+        method:"POST",
+        credentials:"include",
+    }
+    try{
+        const res= await fetch(url ,options)
+        const data= await res.json()
+        if(res.ok){
+            console.log(data.message);
+            logOut()
+        }
+    }catch(e){
+        console.log(e);
+    }
+  }
+
 
   return (
     <nav className="fixed top-0 left-0 w-full backdrop-blur-md bg-white/60 border-b border-green-200 shadow-sm z-50 py-4 px-6">
@@ -30,7 +48,7 @@ export default function Navbar({ isLoggedIn }) {
         <div className="hidden md:flex items-center gap-4">
           {
             user &&
-            <button  onClick={logOut}>
+            <button  onClick={logOutFunction}>
                 <a
                 className="block w-full bg-green-600 text-white px-4 py-2 rounded-xl shadow-md"
               >
@@ -72,7 +90,7 @@ export default function Navbar({ isLoggedIn }) {
         <div className="md:hidden mt-3 bg-white/70 backdrop-blur-md rounded-xl shadow px-4 py-4 space-y-4 border border-green-100">
           {
             user &&
-            <button  onClick={logOut}>
+            <button  onClick={logOutFunction}>
                 <a
                 className="block w-full bg-green-600 text-white px-4 py-2 rounded-xl shadow-md"
               >

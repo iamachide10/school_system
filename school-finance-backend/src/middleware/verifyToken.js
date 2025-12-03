@@ -9,16 +9,20 @@ export const verifiyToken=(req, res , next)=>{
 
     const token = authHeader && authHeader.split(" ")[1]
 
+    console.log("Token from header:", token);       
+
     if(!token){
         console.log("token Not found");
-        return res.status(400).json({message:"Token not found"})
+        return res.status(401).json({message:"Token not found"})
     }
     const secrete = process.env.JWT_SECRETE
     const verifiyFunction=(err , decoded)=>{
+        
         if(err){
-            console.log("Invalid token");
-            return res.status(403).json({message: "Invalid or Expired Token"})   
+            console.log("ERRO",err);
+            return res.status(401).json({message: "Invalid or Expired Token"})   
         } 
+        console.log("Decoded data",decoded);
         req.user=decoded
     }
     jwt.verify(token , secrete ,  verifiyFunction)

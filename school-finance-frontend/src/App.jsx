@@ -12,6 +12,8 @@ import Navbar from "./components/navBar"
 import { useAuth } from "./context/authContext"
 import StudentsList from "./Pages/classes/studentsList"
 import { SessionPage } from "./Pages/sessionPages/sessionPage"
+import StudentProfile from "./Pages/classes/studentDetails"
+import EmailVerification from "./Pages/authPages/verificationPage"
 
 
 
@@ -27,6 +29,7 @@ export default function App() {
         setOnLog(false)
       }
     },[user])
+ 
   
 
   return (
@@ -34,7 +37,9 @@ export default function App() {
     <Navbar isLoggedIn={onLog} />
     <Routes>
       <Route path="/" element={  <LandingPage/>  } />
+      <Route path="/students/profile/:student_id" element={  <StudentProfile />  } />
       <Route path="/signup" element={  <SignUp/>  } />
+      <Route path="/verify_email/:token" element={  <EmailVerification/>  } />
       <Route path="/classes/:id" element={  <ClassDetails/>  } />
       <Route path="/classes/students/:id" element={  <StudentsList/>  } />
       <Route path="/classes/sessions/:class_id/:teacher_id" element={  <SessionPage/>  } />

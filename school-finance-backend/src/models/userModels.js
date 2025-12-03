@@ -3,16 +3,15 @@ import pool from "../config/db.js"
 import bcrypt from "bcryptjs"
 
 
-
-export const createUser= async(password,email,role,name)=>{
+export const createUser= async(password,email,role,name,verify_expiry,verification_token)=>{
     try{
         const salt=await bcrypt.genSalt(10)
         const hashedPassword= await bcrypt.hash(password , salt)
 
         const result = await pool.query(
-            `INSERT INTO users (name,email,password,role)
-            VALUES($1 ,$2 ,$3 ,$4)  RETURNING * 
-            ` ,[name,email ,hashedPassword, role])
+            `INSERT INTO users (name,email,password,role ,verify_expiry,verification_token)
+            VALUES($1 ,$2 ,$3 ,$4,$5,$6)  RETURNING * 
+            ` ,[name,email ,hashedPassword, role ,verify_expiry,verification_token ])
             return result.rows[0]
         }catch(e){
             console.log("Failed :",e);
@@ -36,6 +35,7 @@ export const getUser=async(email)=>{
 }
 
 
+
 export const getAllUsersModel=async ()=>{
 try{
     const result = await pool.query("SELECT * FROM users")
@@ -44,3 +44,5 @@ try{
     console.log(e);
     }
 }
+
+

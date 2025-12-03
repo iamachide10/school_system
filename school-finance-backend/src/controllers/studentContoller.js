@@ -1,4 +1,4 @@
-import createStudentModel,{getAllStudents, getClassStudentsModel, getHeighestSeq, getStudentsModel} from "../models/studentsModels.js";
+import createStudentModel,{getAllStudents, getClassStudentsModel, getHeighestSeq, getStudentByIdModel, getStudentsModel} from "../models/studentsModels.js";
 import { getClassById } from "../models/classesModles.js";
 
 export const createStudentController = async(req,res) =>{
@@ -51,6 +51,10 @@ export const getClassStudentsController=async(req,res)=>{
     const classs=await getClassById(classId)
     const {user}=req
 
+    if(!user){
+      return 
+    }
+
     if(user.role!=='teacher' || user.id !==parseInt(classs.teacher_id)){
       return res.status(400).json({message : "Access denied"})
     }
@@ -58,8 +62,24 @@ try{
     const result = await getClassStudentsModel(classId)
     return res.status(200).json({result})
 }catch(e){
-    console.log("Error" , e);
+    console.log("Error MUUU" , e);
 }
+
+}
+
+
+export const getStudentByIdContoller=async(req, res)=>{
+  const {studentId}= req.params;
+  try{
+    const result= await getStudentByIdModel(studentId);
+    console.log("The student ", result);
+    res.status(200).json({result})
+
+  }catch(e){
+    console.log("Error " ,e);
+    
+  }
+  
 
 }
 

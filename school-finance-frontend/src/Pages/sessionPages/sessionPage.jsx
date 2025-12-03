@@ -206,7 +206,8 @@ const handleFinishSession =async () => {
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
-                checked={student.has_paid}
+                checked={!!student.has_paid}
+              
                 onChange={() => togglePaid(student.id)}
               />
               <span>Paid</span>

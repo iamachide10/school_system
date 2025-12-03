@@ -26,6 +26,7 @@ export default function LoginForm() {
           headers:{
             "Content-Type":"application/json"
           },
+          credentials:"include",
           body:JSON.stringify({data})
         } 
         try{
@@ -33,7 +34,7 @@ export default function LoginForm() {
           const data=await res.json()
           if(res.ok){
             login(data)
-           window.location.href="/classes"
+            console.log(data);
           }
 
         }catch(e){

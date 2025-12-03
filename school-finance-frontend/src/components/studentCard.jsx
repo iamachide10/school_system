@@ -3,7 +3,7 @@ import { User } from "lucide-react"; // nice avatar icon
 
 export const StudentCard = ({ student }) => {
   return (
-    <Link to={`/students/${student.student_code}`}>
+    <Link to={`/students/profile/${student.student_code}`}>
       <div className="p-5 bg-white border border-green-200 shadow-lg rounded-2xl hover:shadow-2xl cursor-pointer transition-all flex items-center gap-4">
         
         {/* Avatar Icon */}

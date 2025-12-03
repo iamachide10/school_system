@@ -1,7 +1,6 @@
 import dotenv from "dotenv"
 import app from "./src/main.js"
-import { createToken } from "./src/Utils/Token.js";
-import { verifiyToken } from "./src/middleware/verifyToken.js";
+
 
 dotenv.config()
 

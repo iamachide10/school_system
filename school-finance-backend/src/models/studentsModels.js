@@ -50,3 +50,13 @@ export const getClassStudentsModel=async (id)=>{
        console.log(e)
    } 
 }
+
+
+export const getStudentByIdModel=async(studentId)=>{
+    try{
+        const result = await pool.query("SELECT * FROM students WHERE student_code = $1" ,[studentId])
+        return result.rows[0]
+    }catch(e){
+        console.log(e);
+    }
+}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ClassCard } from "../../components/classCard";
 
 export  const Classes=()=> {
+    //localStorage.removeItem("token");
   const [classes, setClasses] = useState([]);
 
   useEffect(()=>{

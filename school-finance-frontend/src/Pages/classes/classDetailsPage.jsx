@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect ,useState} from "react";
 import { useAuth } from "../../context/authContext";
+import { apiFetch } from "../../utils/apiFetch";
 
 export default function ClassDetails() {
   const [message,setMessage]=useState("")
@@ -13,12 +14,11 @@ export default function ClassDetails() {
     const getClassStudents=async()=>{
       
   try{
-        const res= await fetch(`http://localhost:5001/api/student/get_class_students/${id}` ,
+        const res= await apiFetch(`/student/get_class_students/${id}` ,
           { 
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
-                "Authorization" :`Bearer ${token}`
             },
           }
         )
