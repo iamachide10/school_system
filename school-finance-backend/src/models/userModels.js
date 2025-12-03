@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs"
 export const createUser= async(password,email,role,name)=>{
     try{
         const salt=await bcrypt.genSalt(10)
-        const hashedPassword= await bcrypt.hash(password , salt)
+        const hashedPassword = await bcrypt.hash(password , salt)
 
         const result = await pool.query(
             `INSERT INTO users (name,email,password,role)

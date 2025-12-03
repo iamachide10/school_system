@@ -24,6 +24,4 @@ try{
     console.error("Database connnection failed :", error)
 }
 
-export default pool 
-
-                                                    
+export default pool

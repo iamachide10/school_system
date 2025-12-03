@@ -31,10 +31,10 @@ export const getAllStudents=async()=>{
 export const getHeighestSeq=async(id)=>{
     const result =await pool.query("SELECT MAX(sequence) AS lastSeq FROM students WHERE class_id=$1 " ,[id])   
     console.log(result);
-     
+
     console.log((parseInt(result.rows[0].lastseq) ||0));
-    return (parseInt(result.rows[0].lastseq)||0) + 1    
-    
+    return (parseInt(result.rows[0].lastseq)||0) + 1
+
 }
 
 
