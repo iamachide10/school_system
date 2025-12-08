@@ -20,7 +20,7 @@ export default function StudentProfile() {
         const fetchStudent=async()=>{
           setLoading(true)
           try{
-        const res= await fetch(`http://localhost:5001/api/student/get_student/${student_id}`)
+        const res= await fetch(`https://school-system-backend-78p1.onrender.com/api/student/get_student/${student_id}`)
         const data= await res.json()
         if(res.ok){
           console.log(data);
@@ -41,7 +41,7 @@ export default function StudentProfile() {
   const handleSave = async() => {
 
     try{
-      const res= await fetch("http://localhost:5001/api/student/update_info" ,{
+      const res= await fetch("https://school-system-backend-78p1.onrender.com/api/student/update_info" ,{
         method:"POST",
         headers :{
           "Content-type":"application/json"

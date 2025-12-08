@@ -26,7 +26,7 @@ export default function StudentsList() {
       console.log(token);
       
       try{
-        const res= await fetch(`http://localhost:5001/api/student/get_class_students/${id}` ,
+        const res= await fetch(`https://school-system-backend-78p1.onrender.com/api/student/get_class_students/${id}` ,
           { 
             method:"POST",
             headers:{

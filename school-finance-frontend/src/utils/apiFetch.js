@@ -9,13 +9,13 @@ Authorization: token ? `Bearer ${token}` : undefined,
 }
 
 
-let response = await fetch(`http://localhost:5001/api${url}`, options)
+let response = await fetch(`https://school-system-backend-78p1.onrender.com/api${url}`, options)
 
 if (response.status === 401) {
 console.log("Access token expired, refreshing...")
 
 
-const refreshRes = await fetch("http://localhost:5001/api/refresh_token", {
+const refreshRes = await fetch("https://school-system-backend-78p1.onrender.com/api/refresh_token", {
   method: "POST",
   credentials: "include",
 })
@@ -31,7 +31,7 @@ localStorage.setItem("token", data.accessToken)   // FIXED
 
 options.headers.Authorization = `Bearer ${data.accessToken}`
 
-response = await fetch(`http://localhost:5001/api${url}`, options)
+response = await fetch(`https://school-system-backend-78p1.onrender.com/api${url}`, options)
 
 }
 

@@ -15,7 +15,7 @@ export default function AccountDashboard() {
 
   const fetchPendingSessions = async () => {
     try {
-      const res = await fetch("http://localhost:5001/api/session/get_pending_session");
+      const res = await fetch("https://school-system-backend-78p1.onrender.com/api/session/get_pending_session");
       const data = await res.json();
 
       if (data.result) {

@@ -6,7 +6,7 @@ export default function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5001/api/users/request-reset", {
+    const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/request-reset", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

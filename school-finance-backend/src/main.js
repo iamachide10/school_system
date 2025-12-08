@@ -15,7 +15,7 @@ const app=express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend
+    origin: "https://lucas-model.onrender.com", // your frontend
     credentials: true,               // allow cookies
   })
 );

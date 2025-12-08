@@ -12,7 +12,7 @@ export default function HeadmistressDashboard() {
 
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:5001/admin/dashboard/summary");
+        const res = await fetch("https://school-system-backend-78p1.onrender.com/admin/dashboard/summary");
         const data = await res.json();
         console.log(data);
         

@@ -10,7 +10,7 @@ export  const Classes=()=> {
     const getAllClasses=async()=>{
       try{
 
-        const result =await fetch("http://localhost:5001/api/classes/getallclasses")
+        const result =await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
   
         const data = await result.json()
         if(result.ok){

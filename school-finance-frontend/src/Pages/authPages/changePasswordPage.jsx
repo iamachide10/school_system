@@ -17,7 +17,7 @@ export default function ResetPassword() {
 useEffect(()=>{
       const verifyToken=async ()=>{
         console.log(token);
-        const res=await fetch(`http://localhost:5001/api/users/verify_reset_token/${token}`)
+        const res=await fetch(`https://school-system-backend-78p1.onrender.com/api/users/verify_reset_token/${token}`)
            const data = await res.json()
            if(res.ok){
             console.log(data);
@@ -39,7 +39,7 @@ useEffect(()=>{
       return;
     }
 
-    const res = await fetch("http://localhost:5001/api/users/reset_password", {
+    const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/reset_password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ newPassword,userId})

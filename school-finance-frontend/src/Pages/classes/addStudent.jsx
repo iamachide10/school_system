@@ -11,7 +11,7 @@ export const AddStudent=()=>{
     useEffect(()=>{
             const getStudentsClasses=async()=>{
                 try{
-                    const request= await fetch("http://localhost:5001/api/classes/getallclasses")
+                    const request= await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
                     const data= await request.json()
                     if(request.ok){
                         setClasses(data.result) 
@@ -31,7 +31,7 @@ export const AddStudent=()=>{
           fullName
         }
 
-        const url="http://localhost:5001/api/student/create_student"
+        const url="https://school-system-backend-78p1.onrender.com/api/student/create_student"
 
         const options={
           method:"POST",

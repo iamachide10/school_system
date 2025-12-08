@@ -10,7 +10,7 @@ export  const CreateClass=()=>{
         className,
         classNumber
         }
-        const url= "http://localhost:5001/api/classes/create_class"
+        const url= "https://school-system-backend-78p1.onrender.com/api/classes/create_class"
 
         const option={
             method:"POST",

@@ -12,7 +12,7 @@ const SignUp=()=>{
     useEffect(()=>{
         const getStudentsClasses=async()=>{
             try{
-                const request= await fetch("http://localhost:5001/api/classes/getallclasses")
+                const request= await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
                 const data= await request.json()
                 if(request.ok){
                     console.log("Data",data.result);
@@ -48,7 +48,7 @@ const SignUp=()=>{
 
       
         
-        const url= "http://localhost:5001/api/users/register"
+        const url= "https://school-system-backend-78p1.onrender.com/api/users/register"
         const options={
             method:"POST",
             headers:{

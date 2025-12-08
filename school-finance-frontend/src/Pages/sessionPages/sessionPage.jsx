@@ -24,7 +24,7 @@ const filteredStudents = students.filter((s) =>
   useEffect(() => {
       if (!token) return;
     const createSession = async () => {
-      const url = "http://localhost:5001/api/session/start_session";
+      const url = "https://school-system-backend-78p1.onrender.com/api/session/start_session";
       const options = {
         method: "POST",
         headers: {
@@ -55,7 +55,7 @@ const filteredStudents = students.filter((s) =>
   const loadStudents = async() => {
       setLoading(true);
       try{
-          const res= await fetch(`http://localhost:5001/api/student/get_class_students/${class_id}` ,
+          const res= await fetch(`https://school-system-backend-78p1.onrender.com/api/student/get_class_students/${class_id}` ,
             { 
               method:"POST",
               headers:{
@@ -98,7 +98,7 @@ const handleSubmit = async () => {
     default_fees: Number(s.default_fees)
   }));
 
-  const url = "http://localhost:5001/api/session/submit_session";
+  const url = "https://school-system-backend-78p1.onrender.com/api/session/submit_session";
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -131,7 +131,7 @@ useEffect(() => {
   const fetchSessionRecords = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5001/api/session/${sessionId}/records`);
+      const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${sessionId}/records`);
       const data = await res.json();
 
       if (!data || data.length === 0) {
@@ -164,7 +164,7 @@ useEffect(() => {
   // FINISH SESSION (temporary empty logic)
 const handleFinishSession =async () => {
     const sessionCode = prompt(`Enter session closing code: ${closingCode}`)
-    const url = "http://localhost:5001/api/session/finish_session";
+    const url = "https://school-system-backend-78p1.onrender.com/api/session/finish_session";
     
     const options = {
     method: "POST",
