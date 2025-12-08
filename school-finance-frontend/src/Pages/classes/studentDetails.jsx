@@ -38,15 +38,25 @@ export default function StudentProfile() {
 
 
 
-  const handleSave = () => {
-    const updated = {
+  const handleSave = async() => {
+
+    try{
+      const res= await fetch("http://localhost:5001/api/student/update_info" ,{
+        method:"POST",
+        headers :{
+          "Content-type":"application/json"
+        },
+        body: JSON.stringify({
       id: student.id,
-      full_name: name,
       default_fees: fee,
-    };
 
-    console.log("Saving updated student:", updated);
+    })
 
+      })
+
+    }catch(e){
+      console.log(e);
+    }
     setEditName(false);
     setEditFee(false);
   };
@@ -92,9 +102,8 @@ export default function StudentProfile() {
         {open && (
           <div className="mt-4 bg-white rounded-xl p-4 shadow-md border border-green-100 space-y-4">
 
-            {/* NAME EDIT */}
             <div>
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <p className="font-semibold text-green-800">Full Name</p>
                 <button
                   onClick={() => setEditName(!editName)}
@@ -102,7 +111,7 @@ export default function StudentProfile() {
                 >
                   {editName ? "Lock" : "Edit"}
                 </button>
-              </div>
+              </div> */}
 
               {editName ? (
                 <input

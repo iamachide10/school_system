@@ -46,3 +46,29 @@ try{
 }
 
 
+export const saveResetToken=async(token,tokenExpiry,userId)=>{
+    try{
+        const result = await pool.query("UPDATE users SET verification_token=$1 ,verify_expiry=$2 WHERE id=$3 RETURNING *",[token,tokenExpiry,userId])
+        return result.rows[0]
+    }catch(e){
+        console.log("Server Error" ,e);
+        
+    }
+
+}
+
+export const changePasswordModel=async(userId,password)=>{
+    const salt=await bcrypt.genSalt(10)
+    const hashedPassword= await bcrypt.hash(password , salt)
+    try{
+        const result = await pool.query("UPDATE users SET password= $1 WHERE id=$2 RETURNING *",[hashedPassword,userId])
+        return result.rows[0]
+
+    }catch(e){
+        console.log(e);
+        
+
+    }
+}
+
+

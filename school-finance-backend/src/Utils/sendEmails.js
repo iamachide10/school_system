@@ -1,57 +1,49 @@
-import sgMail from "@sendgrid/mail"
-import dotenv from "dotenv"
+import Brevo from "@getbrevo/brevo";
+import dotenv from "dotenv";
+dotenv.config();
 
-dotenv.config()
+export const sendEmail = async (to, subject, text, name, token, status) => {
+  console.log("BREVO KEY" ,process.env.BREVO_API_KEY );
+  console.log("FROM MAIL" ,process.env.BREVO_FROM);
+  
+  
+  const url = `http://localhost:5173/${
+    status === "verifyEmail" ? "verify_email" : "reset_password"
+  }/${token}`;
 
+  const html1 = `
+    <p>Hi ${name},</p>
+    <p>Please verify your email by clicking the link below:</p>
+    <a href="${url}">Verify Email</a>
+    <p>This link expires in ${process.env.TOKEN_EXPIRY_HOURS} hour.</p>
+  `;
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const html2 = `
+    <p>Hi ${name},</p>
+    <p>You requested a password reset. Click the link below:</p>
+    <a href="${url}">Reset Password</a>
+    <p>This link expires in ${process.env.TOKEN_EXPIRY_HOURS} hour.</p>
+  `;
 
-export const sendEmail=async(to,subject,text,name,token, status)=>{
+  try {
+    const apiInstance = new Brevo.TransactionalEmailsApi();
+    apiInstance.setApiKey(
+      Brevo.TransactionalEmailsApiApiKeys.apiKey,
+      process.env.BREVO_API_KEY 
+    );
 
-    const verifyUrl=`http://localhost:5173/verify_email/${token}`
-    const forgotPasswordUrl=`http://localhost:5173/forgot_password/${token}`
+    const sendSmtpEmail = {
+      to: [{ email: to }],
+      sender: { email: process.env.BREVO_FROM },
+      subject,
+      htmlContent: status === "verifyEmail" ? html1 : html2,
+      textContent: text,
+    };
 
-    const verifyHtml= `
-      <p>Hi ${name},</p>
-      <p>Please verify your email by clicking the link below:</p>
-      <a href="${verifyUrl}">Verify Email</a>
-      <p>This link expires in 1hour.</p>
-    `
-
-    const forgotPasswordHtml= `
-      <p>Hi ${name},</p>
-      <p>Please reset your password by clicking the link below:</p>
-      <a href="${forgotPasswordUrl}">Resest Password.</a>
-      <p>This link expires in 1 hour.</p>
-    `
-    const verifyMsg={
-        to,
-        from: process.env.FROM_EMAIL,
-        subject,
-        text,
-        verifyHtml
-    }
-    const resetMsg={
-        to,
-        from: process.env.FROM_EMAIL,
-        subject,
-        text,
-        forgotPasswordHtml
-    }
-    
-    try{
-
-        if(status="resetPassword"){
-            console.log("Email sent successfully to ", to);
-            await sgMail.send(resetMsg)
-        }else if(status="verifyEmail"){            
-            console.log("Email sent successfully to ", to);
-            await sgMail.send(verifyMsg)
-        }
-
-    }
-    catch(e){
-        console.log("Error sending email to ", to, e);
-        throw e
-    }   
-}
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("Email sent successfully to", to);
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
+};

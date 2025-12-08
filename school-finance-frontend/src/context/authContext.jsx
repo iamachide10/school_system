@@ -12,8 +12,11 @@ console.log(userData.existingUser.id)
 localStorage.setItem("user_id", String(userData.existingUser.id))
 localStorage.setItem("user", userData.existingUser.name)
 localStorage.setItem("token", userData.existingUser.token)  
-window.location.href="/classes"// FIXED
-
+if(userData.existingUser.role==="teacher"){
+  window.location.href="/classes"// FIXED
+}else if(userData.existingUser.role==="accountant"){
+    window.location.href="/accountant-dashboard"
+}
 
 }
 

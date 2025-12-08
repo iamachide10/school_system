@@ -1,3 +1,4 @@
+import adminDashboardRoutes from "./routes/adminRoutes.js";
 import express from "express";
 import userRoutes from "./routes/userRoutes.js"
 import classRoutes from "./routes/classRoutes.js"
@@ -28,6 +29,9 @@ app.use("/api/users", userRoutes)
 app.use("/api/classes", classRoutes)
 app.use("/api/student",studentRoute)
 app.use("/api/session" , sessionRouter)
+app.use("/admin/dashboard", adminDashboardRoutes);
 app.post("/api/refresh_token", refreshTokenController)
+
+
 
 export default app

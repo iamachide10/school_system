@@ -1,14 +1,13 @@
-import { checkActiveSessionModel, finishSessionModel, getAllSessionModel, getRecordsByIdModel, getSessionById, startSessionModel, submitSessionModel } from "../models/sessionModel.js"
+import { checkActiveSessionModel, confirmSessionsModel, finishSessionModel, getAllPendingSessionsModel, getAllSessionModel, getRecordsByIdModel, getSessionById, startSessionModel, submitSessionModel } from "../models/sessionModel.js"
 
 
 export const startSessionController=async(req,res)=>{
-
-
     const {teacher_id, class_id}=req.body
     const generateSessionCode=()=>{
          return Math.floor(100000 + Math.random() * 900000).toString();
     }
     const session_code=generateSessionCode()
+
     const existingSession= await checkActiveSessionModel(class_id)
 
     if(existingSession){
@@ -28,6 +27,7 @@ export const startSessionController=async(req,res)=>{
             session:result
         })
     }catch(e){
+
         console.log("Error occured ",e);
         
     }
@@ -98,3 +98,38 @@ export const finishSessionController=async(req,res)=>{
     }
 }
 
+
+export const getAllPendingSessionController=async(req,res)=>{
+    try{
+        const result =await getAllPendingSessionsModel()
+        if(!result ){
+            return res.status(200).json({message:"No pending sessions yet"})
+        } 
+
+        return res.status(200).json({message:"Pending sessions found" , result})
+
+    }catch(e){
+        return res.json({message:"Sever error"+e})
+
+    }
+}
+
+export const confirmSessionsController=async(req,res)=>{
+try{
+    const { sessionId } = req.params
+    console.log(sessionId);
+    
+    const confirmSession = await confirmSessionsModel(sessionId)
+    if (!confirmSession){
+        console.log(confirmSession);
+        
+        console.log("Session not found");
+        return res.json({message:"Session not found"}).status(400)
+    }
+    console.log("Session confirmed")
+    return res.json({message:"Session confirmed successfully."}).status(200)
+  }catch(e){
+    console.log(e);
+}
+
+}

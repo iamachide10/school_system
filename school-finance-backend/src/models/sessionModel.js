@@ -11,16 +11,12 @@ export const startSessionModel=async(teacher_id,class_id,session_code)=>{
         console.log(e);
         
     }
-
-
 }
 
 export const checkActiveSessionModel = async (class_id) => {
     const query = `
         SELECT * FROM session
         WHERE class_id = $1 AND finished = false
-        ORDER BY id DESC
-        LIMIT 1
     `;
     const values = [class_id];
     const result = await pool.query(query, values);
@@ -30,6 +26,7 @@ export const checkActiveSessionModel = async (class_id) => {
 
 
 export const submitSessionModel = async (student, session_id) => {
+
   try {
     const query = `
       INSERT INTO session_records (session_id, student_id, has_paid, fee_amount)
@@ -60,11 +57,10 @@ export const submitSessionModel = async (student, session_id) => {
 export const getRecordsByIdModel = async (sessionId) => {
   try {
     const query = `
-      SELECT
+      SELECT  
         sr.student_id,
         sr.has_paid,
         sr.fee_amount,
-
         s.full_name,
         s.student_code,
         s.default_fees
@@ -75,8 +71,9 @@ export const getRecordsByIdModel = async (sessionId) => {
       ORDER BY s.id ASC;
     `;
     const { rows } = await pool.query(query, [sessionId]);
-
+    console.log(rows);
     return rows;
+        
   } catch (error) {
     console.log("getRecordsByIdModel error:", error);
     return [];
@@ -106,3 +103,39 @@ try{
     }
 }
 
+
+export const getAllPendingSessionsModel=async()=>{
+  const query = `
+    SELECT 
+    s.id AS session_id,
+    s.class_id,
+    c.name,
+    s.time, 
+    (SELECT SUM(fee_amount) FROM session_records WHERE session_id=s.id AND 
+    has_paid=true
+
+    )AS total_amount,
+    (SELECT COUNT(*) FROM session_records WHERE session_id = s.id AND has_paid=true
+    )AS paid_count
+    FROM session s 
+    INNER JOIN classes c ON  c.id=s.class_id
+    WHERE s.finished = true AND confirmed= false
+    ORDER BY s.time DESC;
+  ` ;
+try{
+  const {rows} = await pool.query(query)
+  return rows
+}catch(e){
+  console.log(e);
+}
+}
+
+
+export const confirmSessionsModel= async (sessionId)=>{
+try{
+  const result =await pool.query("UPDATE session SET confirmed = true WHERE id = $1 RETURNING *",[sessionId])
+  return result.rows[0]
+}catch(e){
+  console.log(e);  
+}
+}

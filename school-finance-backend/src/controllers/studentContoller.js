@@ -1,4 +1,4 @@
-import createStudentModel,{getAllStudents, getClassStudentsModel, getHeighestSeq, getStudentByIdModel, getStudentsModel} from "../models/studentsModels.js";
+import createStudentModel,{getAllStudents, getClassStudentsModel, getHeighestSeq, getStudentByIdModel, getStudentsModel, updateStudentInfoModel} from "../models/studentsModels.js";
 import { getClassById } from "../models/classesModles.js";
 
 export const createStudentController = async(req,res) =>{
@@ -81,5 +81,22 @@ export const getStudentByIdContoller=async(req, res)=>{
   }
   
 
+}
+
+
+export const updateStudentInfoController=async(req,res)=>{
+  try{
+  const { id,default_fees}=req.body;
+  console.log(req.body);
+  const result = await updateStudentInfoModel(id,default_fees)
+  if(!result){
+    return res.json({message:"Student not found."}).status(401)
+  }
+  return res.json({message:"Info updated successfully."}).status(200)
+  
+
+  }catch(e){
+  console.log("Error occured at Controller",e); 
+}
 }
 

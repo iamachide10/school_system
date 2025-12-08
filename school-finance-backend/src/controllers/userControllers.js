@@ -1,4 +1,4 @@
-import { createUser,getAllUsersModel,getUser } from "../models/userModels.js";
+import { changePasswordModel, createUser,getAllUsersModel,getUser, saveResetToken } from "../models/userModels.js";
 import bcrypt from "bcryptjs";
 import { createAccessToken,signRefreshToken } from "../Utils/Token.js";
 import { updateTeacherStatus} from "../models/classesModles.js";
@@ -35,7 +35,7 @@ export const registerUser=async(req, res)=>{
         }
        return res.status(200).json(newUser)
     }catch(e){
-        logger.error("Error registering user:", e);     
+        console.error("Error registering user:", e);     
         return res.status(500).json({message:`error occured , ${e}`})
     }
 }
@@ -125,7 +125,7 @@ export const logOutController = async(req, res)=>{
     }
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "Strict",
     });
     console.log("User logged out successfully");
@@ -137,16 +137,19 @@ export const logOutController = async(req, res)=>{
         }
 }
 
-export const forgotPasswordUserController= async (req,res)=>{
+export const  requestResetController= async (req,res)=>{
 try{
     const { email } = req.body
     const existingEmail = await getUser(email)
     const name = existingEmail.name
     if(existingEmail){
-        const { token,expiredTime} =  generateVerificationToken()
-    
+        const { token,expressAt} =  generateVerificationToken()
+        
+
+       const result= await saveResetToken(token,expressAt,existingEmail.id)
         await sendEmail(email,"Reset Your Password",
                         "Please click the link below to reset your password",name,token,"resetPassword")
+                        
         return res.json({message:"Please check your email inbox for a password reset link."}).status(200)                  
     }else{
         return res.json({message:"User not found"}).status(400)
@@ -154,8 +157,21 @@ try{
         }catch(e){
             console.log(e);
             return res.json({message:"Server error"}).status(500)
-            
-        }
-
+}
 
 }
+
+export const changePasswordController=async(req,res)=>{
+    try{
+        const {newPassword,userId}=req.body
+        const result = await changePasswordModel(userId,newPassword)
+        console.log(result);
+        return res.status(200).json({message:"Password reset successful."})
+
+    }catch(e){
+        return res.status(500).json({message:"Server error" + e})
+    }
+}
+
+
+

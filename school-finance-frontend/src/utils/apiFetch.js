@@ -8,6 +8,7 @@ options.headers = {
 Authorization: token ? `Bearer ${token}` : undefined,
 }
 
+
 let response = await fetch(`http://localhost:5001/api${url}`, options)
 
 if (response.status === 401) {

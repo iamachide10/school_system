@@ -30,5 +30,5 @@ export const generateVerificationToken=()=>{
     const token= crypto.randomBytes(20).toString("hex")
     const expressAt= new Date (Date.now() + 30*60*1000) 
 
-    return {token, expressAt}     
+    return {token, expressAt}   
 }

@@ -60,3 +60,13 @@ export const getStudentByIdModel=async(studentId)=>{
         console.log(e);
     }
 }
+
+
+export const updateStudentInfoModel=async(studentId,defaultFee)=>{
+    try{
+        const result = await pool.query("UPDATE students SET  default_fees=$1 WHERE id=$2 RETURNING *",[defaultFee,studentId])
+        return  result.rows[0]
+    }catch(e){
+        console.log("Error occured at Model" ,e);
+    }
+}
