@@ -20,7 +20,7 @@ export default function Navbar({ isLoggedIn }) {
   const linksToShow = isLoggedIn ? navLinks.private : navLinks.public;
 
   const logOutFunction=async()=>{
-    const url="http://localhost:5001/api/users/logout"
+    const url="https://school-system-backend-78p1.onrender.com/api/users/logout"
     const options={
         method:"POST",
         credentials:"include",
