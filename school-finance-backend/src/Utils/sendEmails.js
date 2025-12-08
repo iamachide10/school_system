@@ -7,7 +7,7 @@ export const sendEmail = async (to, subject, text, name, token, status) => {
   console.log("FROM MAIL" ,process.env.BREVO_FROM);
   
   
-  const url = `http://localhost:5173/${
+  const url = `https://lucas-model.onrender.com/${
     status === "verifyEmail" ? "verify_email" : "reset_password"
   }/${token}`;
 
