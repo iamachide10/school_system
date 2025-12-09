@@ -56,9 +56,11 @@ export const getRecordsByIdController = async (req, res) => {
   try {
     const records = await getRecordsByIdModel(sessionId);
     if (!records || records.length === 0) {
+        console.log("No records found for sessionId:", sessionId);
       return res.status(200).json([]);  // no records yet but valid
     }
-
+    console.log(records);
+    
     return res.status(200).json(records);
   } catch (error) {
     console.error("getRecordsByIdController error:", error);
