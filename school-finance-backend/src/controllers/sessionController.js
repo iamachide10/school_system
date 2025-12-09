@@ -38,6 +38,8 @@ export const startSessionController=async(req,res)=>{
 
 
 export const submitSessionController = async(req,res)=>{
+    console.log("Submitting");
+    
 try{
     const { students, sessionId} = req.body    
     for (const student of students){      

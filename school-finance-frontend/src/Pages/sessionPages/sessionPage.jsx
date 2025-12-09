@@ -53,7 +53,7 @@ const filteredStudents = students.filter((s) =>
         else {
           console.log("New session created, loading class students.");
           await loadStudents();
-          await handleSubmit(); // Pre-submit to create empty records
+           handleSubmit(); // Pre-submit to create empty records
         }
       }
     } catch (e) {
