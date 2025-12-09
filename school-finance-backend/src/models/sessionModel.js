@@ -4,7 +4,7 @@ import pool from "../config/db.js"
 export const startSessionModel=async(teacher_id,class_id,session_code)=>{
     try {
 
-        const result = await pool.query("INSERT INTO session(teacher_id, class_id ,session_code) VALUES($1 ,$2 , $3 ) RETURNING *" ,[teacher_id, class_id ,session_code] )
+        const result = await pool.query("INSERT INTO session(teacher_id, class_id ,session_code,finished) VALUES($1 ,$2 , $3 ,false) RETURNING *" ,[teacher_id, class_id ,session_code] )
         
         return result.rows[0]
     }catch(e){
