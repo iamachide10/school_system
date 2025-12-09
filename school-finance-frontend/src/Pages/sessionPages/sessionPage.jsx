@@ -144,15 +144,17 @@ const handleSubmit = async () => {
       try {
         const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${sessionId}/records`);
         const data = await res.json();
-  
+        console.log("Data received",data);
+        
         if (!data || data.length === 0) {
           setLoading(false);
           return;
         }
+
         console.log(data);
         
   
-        setStudents(data.records.map(r => ({
+        setStudents(data.map(r => ({
           id: Number(r.student_id),
           full_name: r.full_name,
           student_code: r.student_code,
