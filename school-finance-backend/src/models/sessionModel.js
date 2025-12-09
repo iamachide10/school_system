@@ -20,6 +20,7 @@ export const checkActiveSessionModel = async (class_id) => {
     `;
     const values = [class_id];
     const result = await pool.query(query, values);
+    console.log("From models",result.rows[0]);
     return result.rows[0];
 };
 
