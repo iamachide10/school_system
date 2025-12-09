@@ -151,7 +151,6 @@ const handleSubmit = async () => {
           return;
         }
 
-        console.log(data);
         
   
         setStudents(data.map(r => ({

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {StudentCard} from "../../components/studentCard"
 import { useAuth } from "../../context/authContext";
-
+import { apiFetch } from "../../utils/apiFetch";
 
 export default function StudentsList() {
   const { id } = useParams();
@@ -26,12 +26,11 @@ export default function StudentsList() {
       console.log(token);
       
       try{
-        const res= await fetch(`https://school-system-backend-78p1.onrender.com/api/student/get_class_students/${id}` ,
+       const res= await apiFetch(`/student/get_class_students/${id}` ,
           { 
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
-                "Authorization" :`Bearer ${token}`
             },
           }
         )
@@ -45,7 +44,7 @@ export default function StudentsList() {
         }
       }catch(e){
         console.log(e);
-      }    //setStudents(testStudents); 
+      }   
       }
       getClassStudents()
   }, [id]);

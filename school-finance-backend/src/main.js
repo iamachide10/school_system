@@ -19,6 +19,7 @@ app.use(
     credentials: true,               // allow cookies
   })
 );
+
 app.use(cookieParser())
 app.use(express.json())
 
