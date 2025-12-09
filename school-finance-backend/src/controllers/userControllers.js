@@ -75,7 +75,7 @@ export const logUser =async (req, res)=>{
                     sameSite: "Strict", // CSRF protection
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
                 });
-            res.status(200).json({existingUser})
+            return res.status(200).json({existingUser})
         }else{
             console.log("Email or Password Incorrect.");
         }  

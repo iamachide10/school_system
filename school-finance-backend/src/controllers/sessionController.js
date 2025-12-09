@@ -9,6 +9,8 @@ export const startSessionController=async(req,res)=>{
     const session_code=generateSessionCode()
 
     const existingSession= await checkActiveSessionModel(class_id)
+    console.log(existingSession);
+    
 
     if(existingSession){
         console.log("There is already one.");
