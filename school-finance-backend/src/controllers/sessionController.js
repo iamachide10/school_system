@@ -9,7 +9,6 @@ export const startSessionController=async(req,res)=>{
     const session_code=generateSessionCode()
 
     const existingSession= await checkActiveSessionModel(class_id)
-    console.log(existingSession);
     
 
     if(existingSession){
@@ -61,7 +60,6 @@ export const getRecordsByIdController = async (req, res) => {
         console.log("No records found for sessionId:", sessionId);
       return res.status(200).json([]);  // no records yet but valid
     }
-    console.log("Records received",records);
     
     return res.status(200).json(records);
   } catch (error) {
