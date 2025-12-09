@@ -45,10 +45,14 @@ const filteredStudents = students.filter((s) =>
         setClosingCode(data.session.session_code);
         // If it's an existing session → load saved records
         if (data.status === "existing") {
-          setShouldRefresh(true);  // triggers fetchSessionRecords()
+          setShouldRefresh(true); 
+          if(students.length ===0){
+              await loadStudents();
+          } // triggers fetchSessionRecords()
         } 
         // If it's a new session → load class list
         else {
+          console.log("New session created, loading class students.");
           await loadStudents();
         }
       }
