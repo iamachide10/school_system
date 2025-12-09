@@ -21,34 +21,44 @@ const filteredStudents = students.filter((s) =>
 
    
 
-  useEffect(() => {
-      if (!token) return;
-    const createSession = async () => {
-      const url = "https://school-system-backend-78p1.onrender.com/api/session/start_session";
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ class_id, teacher_id }),
-      };
+ useEffect(() => {
+  if (!token) return;
 
-      try {
-        const res = await fetch(url, options);
-        const data = await res.json();
+  const createSession = async () => {
+    const url = "https://school-system-backend-78p1.onrender.com/api/session/start_session";
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ class_id, teacher_id }),
+    };
 
-        if (res.ok) {
-          console.log(data);
-          setSessionId(data.session.id)
-          setClosingCode(data.session.session_code)
+    try {
+      const res = await fetch(url, options);
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log("SESSION RESPONSE:", data);
+        // Always set sessionId + code
+        setSessionId(data.session.id);
+        setClosingCode(data.session.session_code);
+        // If it's an existing session → load saved records
+        if (data.status === "existing") {
+          setShouldRefresh(true);  // triggers fetchSessionRecords()
+        } 
+        // If it's a new session → load class list
+        else {
           await loadStudents();
         }
-      } catch (e) {
-        console.log(e);
       }
-    };
-    createSession();
-  }, [class_id, teacher_id,token]);
+    } catch (e) {
+      console.log("createSession error:", e);
+    }
+  };
+
+  createSession();
+}, [class_id, teacher_id, token]);
 
 
   
@@ -107,58 +117,58 @@ const handleSubmit = async () => {
       students: cleanedStudents
     }),
   };
-
-  try {
-    const result = await fetch(url, options);
-    const data = await result.json();
-
-    if (result.ok) {
-      console.log("Submit successful:", data);
-      setShouldRefresh(true);
-    }
-  } catch (e) {
-    console.error("Submit error:", e);
-  }
-
-  setLoading(false);
-};
-
-
-
-useEffect(() => {
-  if (!sessionId) return;
-
-  const fetchSessionRecords = async () => {
-    setLoading(true);
+  
+  
     try {
-      const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${sessionId}/records`);
-      const data = await res.json();
-
-      if (!data || data.length === 0) {
-        setLoading(false);
-        return;
+      const result = await fetch(url, options);
+      const data = await result.json();
+  
+      if (result.ok) {
+        console.log("Submit successful:", data);
+        setShouldRefresh(true);
       }
-
-      setStudents(data.map(r => ({
-        id: Number(r.student_id),
-        full_name: r.full_name,
-        student_code: r.student_code,
-        default_fees: Number(r.default_fees ?? r.fee_amount),
-        has_paid: Boolean(r.has_paid)
-      })));
-
-    } catch (err) {
-      console.error("fetchSessionRecords error:", err);
+    } catch (e) {
+      console.error("Submit error:", e);
     }
+  
     setLoading(false);
-    setShouldRefresh(false); // RESET
   };
-
-  fetchSessionRecords();
-}, [sessionId, shouldRefresh]);
-
-
-
+  
+  
+  
+  useEffect(() => {
+    if (!sessionId) return;
+  
+    const fetchSessionRecords = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${sessionId}/records`);
+        const data = await res.json();
+  
+        if (!data || data.length === 0) {
+          setLoading(false);
+          return;
+        }
+  
+        setStudents(data.map(r => ({
+          id: Number(r.student_id),
+          full_name: r.full_name,
+          student_code: r.student_code,
+          default_fees: Number(r.default_fees ?? r.fee_amount),
+          has_paid: Boolean(r.has_paid)
+        })));
+  
+      } catch (err) {
+        console.error("fetchSessionRecords error:", err);
+      }
+      setLoading(false);
+      setShouldRefresh(false); // RESET
+    };
+  
+    fetchSessionRecords();
+  }, [sessionId, shouldRefresh]);
+  
+  
 
 
   // FINISH SESSION (temporary empty logic)
