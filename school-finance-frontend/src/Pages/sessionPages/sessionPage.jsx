@@ -149,8 +149,10 @@ const handleSubmit = async () => {
           setLoading(false);
           return;
         }
+        console.log(data);
+        
   
-        setStudents(data.map(r => ({
+        setStudents(data.records.map(r => ({
           id: Number(r.student_id),
           full_name: r.full_name,
           student_code: r.student_code,

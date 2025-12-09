@@ -20,7 +20,6 @@ export const checkActiveSessionModel = async (class_id) => {
     `;
     const values = [class_id];
     const result = await pool.query(query, values);
-    console.log("From models",result.rows[0]);
     return result.rows[0];
 };
 
@@ -72,7 +71,6 @@ export const getRecordsByIdModel = async (sessionId) => {
       ORDER BY s.id ASC;
     `;
     const { rows } = await pool.query(query, [sessionId]);
-    console.log(rows);
     return rows;
         
   } catch (error) {

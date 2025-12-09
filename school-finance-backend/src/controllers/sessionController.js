@@ -59,9 +59,9 @@ export const getRecordsByIdController = async (req, res) => {
         console.log("No records found for sessionId:", sessionId);
       return res.status(200).json([]);  // no records yet but valid
     }
-    console.log(records);
+    console.log("Records received",records);
     
-    return res.status(200).json(records);
+    return res.status(200).json({records});
   } catch (error) {
     console.error("getRecordsByIdController error:", error);
     return res.status(500).json({ message: "Server error fetching session records" });
