@@ -44,14 +44,16 @@ const filteredStudents = students.filter((s) =>
         setSessionId(data.session.id);
         setClosingCode(data.session.session_code);
         // If it's an existing session → load saved records
+        await loadStudents();
         if (data.status === "existing") {
           setShouldRefresh(true); 
-           // triggers fetchSessionRecords()
+      
         } 
         // If it's a new session → load class list
         else {
           console.log("New session created, loading class students.");
           await loadStudents();
+          await handleSubmit(); // Pre-submit to create empty records
         }
       }
     } catch (e) {
@@ -171,7 +173,7 @@ const handleSubmit = async () => {
     };
   
     fetchSessionRecords();
-  }, [sessionId, shouldRefresh]);
+  }, [ shouldRefresh]);
   
   
 
