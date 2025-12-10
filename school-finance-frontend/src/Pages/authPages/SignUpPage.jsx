@@ -80,8 +80,9 @@ const onSubmit = async (e) => {
     console.log("Register result:", result);
 
     if (!response.ok) {
-      // Backend returns: { success: false, message: "..." }
+      setLoading(false);
       return setError(result.message || "Something went wrong.");
+      
     }
 
     // Success response from backend
