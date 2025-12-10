@@ -6,10 +6,13 @@ const SignUp=()=>{
     const [email, setEmail]=useState("")
     const [password,setPassword]=useState("")
     const [role,setRole]=useState("")
-    const [selectedClassId ,setSelectedClass]=useState(0)
+    const [selectedClassId ,setSelectedClassId]=useState(0)
     const [isTeacher,setIsTeacher]=useState(false)
     const [classes,setClasses]=useState([])
     const [loading,setLoading]=useState(false)
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+
 
     useEffect(()=>{
         const getStudentsClasses=async()=>{
@@ -38,37 +41,68 @@ const SignUp=()=>{
     },[role])
     
 
-    const onSubmit =async(e)=>{
-        e.preventDefault()
-        if(!name || !email || !password || !role) return alert("Fill all options")
-        const data={
-            name,
-            email,
-            password,
-            role,
-            ...(isTeacher && {selectedClassId})
-        } 
-        const url= "https://school-system-backend-78p1.onrender.com/api/users/register"
-        const options={
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-                
-            },
-            credentials:"include",
-            body: JSON.stringify(data)
-        }
-        setLoading(true)
-        try{
-            const result = await fetch(url,options)
-            if(result.ok){
-                alert("It was ok.")
-            }
-        }catch(e){
-            alert(e)
-        }
-        setLoading(false)
+const onSubmit = async (e) => {
+  e.preventDefault();
+
+  // Basic validation
+  if (!name || !email || !password || !role) {
+    return setError("Please fill all fields.");
+  }
+
+  if (role === "teacher" && !selectedClassId) {
+    return setError("Please select a class for the teacher.");
+  }
+
+  setLoading(true);
+  setError("");
+  setSuccess("");
+
+  const data = {
+    name,
+    email,
+    password,
+    role,
+    ...(role === "teacher" && { selectedClassId })
+  };
+
+  try {
+    const response = await fetch(
+      "https://school-system-backend-78p1.onrender.com/api/users/register",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      }
+    );
+
+    const result = await response.json();
+    console.log("Register result:", result);
+
+    if (!response.ok) {
+      // Backend returns: { success: false, message: "..." }
+      return setError(result.message || "Something went wrong.");
     }
+
+    // Success response from backend
+    setSuccess(
+      `${result.message}. Please check your email to verify your account.`
+    );
+
+    // Optional: Clear form
+    setName("");
+    setEmail("");
+    setPassword("");
+    setRole("");
+    setSelectedClass("");
+
+  } catch (err) {
+    console.error("Register error:", err);
+    setError("Network error. Please try again.");
+  }
+
+  setLoading(false);
+};
 
     if(loading) return <FullScreenLoader/>
 
@@ -132,6 +166,17 @@ const SignUp=()=>{
               </select>
                 </div>
                 }
+                {error && (
+                <p className="text-red-500 text-sm mt-2 bg-red-100 p-2 rounded">
+                    {error}
+                </p>
+                )}
+
+                {success && (
+                <p className="text-green-600 text-sm mt-2 bg-green-100 p-2 rounded">
+                    {success}
+                </p>
+                )}
 
 
                 <button type="submit"

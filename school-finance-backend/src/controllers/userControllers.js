@@ -9,81 +9,151 @@ import { sendEmail } from "../Utils/sendEmails.js";
 
 
 
-export const registerUser=async(req, res)=>{
-    const {name,password,email,role,selectedClassId}=req.body
+export const registerUser = async (req, res) => {
+  const { name, password, email, role, selectedClassId } = req.body;
 
-
-    const existingUser= await getUser(email)
-    if(existingUser){
-        console.log("User already exists  with this email");
-        return res.status(400).json({message:"User already exists with this email"})   
+  try {
+    // 1. CHECK IF USER EXISTS
+    const existingUser = await getUser(email);
+    if (existingUser) {
+      console.log("User already exists with this email");
+      return res.status(200).json({
+        status: "exists",
+        message: "If an account with this email exists, you will receive further information."
+      });
     }
 
-    try{
-        const {token, expressAt}= generateVerificationToken()
+    // 2. GENERATE VERIFICATION TOKEN
+    const { token, expressAt } = generateVerificationToken();
+    console.log("Verification Token:", token, "Expires At:", expressAt);
 
-        console.log("Verification Token:", token, "Expires At:", expressAt);
+    // 3. CREATE USER
+    const newUser = await createUser(
+      password,
+      email,
+      role,
+      name,
+      expressAt,
+      token
+    );
 
-        const newUser=await createUser(password,email,role,name, expressAt,token)
-        console.log(newUser);
-        
-        await sendEmail(email,"Verify your email","Please verify your email", name, token ,"verifyEmail")
-        console.log("User created succesfully , check your email for verification.");
-        if(newUser.role==="teacher"){
-            console.log(newUser);
-            updateTeacherStatus(selectedClassId,newUser.name ,newUser.id)
-        }
-       return res.status(200).json(newUser)
-    }catch(e){
-        console.error("Error registering user:", e);     
-        return res.status(500).json({message:`error occured , ${e}`})
+    await sendEmail(
+      email,
+      "Verify your School System account",
+      "Please verify your email address",
+      name,
+      token,
+      "verifyEmail"
+    );
+
+    console.log("User created successfully. Verification email sent.");
+
+
+    if (newUser.role === "teacher") {
+      await updateTeacherStatus(selectedClassId, newUser.name, newUser.id);
     }
-}
 
 
-export const logUser =async (req, res)=>{
-    const {password ,email} =req.body.data
-    try{
-        const existingUser = await getUser(email);
-    
-        if(!existingUser){
-            console.log("User Not found");
-            return res.status(400).json({message:"User not found"})
-        }
-        const hashPassword= existingUser.password
-        const isValid= await bcrypt.compare(password,hashPassword)
-        if(isValid){
-            console.log("User logged in Successfully.");
-            const id=existingUser.id
-            const role =existingUser.role
+    return res.status(200).json({
+      status: "success",
+      message: "Account created! Check your email to verify your account.",
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role
+      }
+    });
 
-            const accessToken= createAccessToken({id,role})
-            const {refreshToken,tokenHash,tokenPrefix} = signRefreshToken()
+  } catch (e) {
+    console.error("Error registering user:", e);
 
-            await saveRefreshToken(id, tokenHash,tokenPrefix,role)
-            console.log(accessToken);
-            
+    return res.status(500).json({
+      status: "error",
+      message: "Something went wrong while creating your account. Please try again."
+    });
+  }
+};
 
-            const access_token=accessToken
-            existingUser.token=access_token
-            console.log(existingUser);
-            
 
-              res.cookie("refreshToken", refreshToken, {
-                    httpOnly: true,      // JS cannot read it
-                    secure: false,       // change to true in production with HTTPS
-                    sameSite: "Strict", // CSRF protection
-                    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-                });
-            return res.status(200).json({existingUser})
-        }else{
-            console.log("Email or Password Incorrect.");
-        }  
-    }catch(e)
-    {
-        console.log("An error occured try to login", e); 
+export const logUser = async (req, res) => {
+  const { email, password } = req.body.data;
+
+  try {
+    // 1. CHECK IF USER EXISTS
+    const existingUser = await getUser(email);
+
+    if (!existingUser) {
+      console.log("User not found");
+      return res.status(404).json({
+        status: "not_found",
+        message: "No account found with this email."
+      });
     }
-} 
+
+    // 2. CHECK PASSWORD
+    const isValid = await bcrypt.compare(password, existingUser.password);
+
+    if (!isValid) {
+      console.log("Invalid password");
+      return res.status(401).json({
+        status: "invalid_credentials",
+        message: "Incorrect email or password."
+      });
+    }
+
+    // 3. CHECK EMAIL VERIFICATION
+    if (!existingUser.verified) {
+      console.log("Unverified account");
+      return res.status(401).json({
+        status: "unverified",
+        message: "Please verify your email before logging in."
+      });
+    }
+
+    // 4. USER VERIFIED → ISSUE TOKENS
+    const id = existingUser.id;
+    const role = existingUser.role;
+
+    const accessToken = createAccessToken({ id, role });
+    const { refreshToken, tokenHash, tokenPrefix } = signRefreshToken();
+
+    // SAVE REFRESH TOKEN
+    await saveRefreshToken(id, tokenHash, tokenPrefix, role);
+
+    // SET REFRESH COOKIE
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,          // use TRUE in production with HTTPS
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    console.log("Login successful");
+
+    // RETURN SANITIZED USER DATA + ACCESS TOKEN
+    return res.status(200).json({
+      status: "success",
+      message: "Login successful.",
+      user: {
+        id: existingUser.id,
+        name: existingUser.name,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
+      access_token: accessToken
+    });
+
+  } catch (error) {
+    console.error("Login error:", error);
+
+    return res.status(500).json({
+      status: "error",
+      message: "Something went wrong while logging in. Please try again."
+    });
+  }
+};
+
 
 
 export const getAllusersController= async (req,res)=>{
