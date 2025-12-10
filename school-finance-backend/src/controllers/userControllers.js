@@ -140,8 +140,9 @@ export const logUser = async (req, res) => {
         name: existingUser.name,
         email: existingUser.email,
         role: existingUser.role,
+        token: accessToken
       },
-      access_token: accessToken
+  
     });
 
   } catch (error) {

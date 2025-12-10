@@ -42,14 +42,13 @@ export default function LoginForm() {
 
     // 🔥 Handle backend error messages
     if (!res.ok) {
-
+      console.log(res);
       // Unverified account
       if (result.status === "unverified") {
         return setError(
           "Your email is not verified. Please check your inbox to verify your account."
         );
       }
-
       // General errors (wrong password, user doesn't exist, etc.)
       return setError(result.message || "Invalid login details.");
     }
