@@ -44,6 +44,7 @@ export default function LoginForm() {
     if (!res.ok) {
       console.log(res);
       // Unverified account
+      setLoading(false);
       if (result.status === "unverified") {
         return setError(
           "Your email is not verified. Please check your inbox to verify your account."
