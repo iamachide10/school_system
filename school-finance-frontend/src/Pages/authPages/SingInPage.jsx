@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
@@ -11,6 +11,7 @@ export default function LoginForm() {
     const [loading,setLoading]=useState(false)
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [showVerifyBox,setShowVerifyBox  ]=useState(false)
 
 
     const {login}=useAuth()
@@ -46,6 +47,7 @@ export default function LoginForm() {
       // Unverified account
       setLoading(false);
       if (result.status === "unverified") {
+        setShowVerifyBox(true);
         return setError(
           "Your email is not verified. Please check your inbox to verify your account."
         );
@@ -70,6 +72,27 @@ export default function LoginForm() {
 
   setLoading(false);
 };
+
+
+const handleResend = async () => {
+  setLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/resend_verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await res.json();
+      alert(data.message);
+    } catch (e) {
+      alert("Error sending verification email");
+    }
+
+    setLoading(false);
+};
+
 
 
   if(loading) return <FullScreenLoader/>;
@@ -120,6 +143,18 @@ export default function LoginForm() {
               Forgot Password?
             </a>
           </div>
+
+          {showVerifyBox && (
+          <div className="bg-yellow-100 p-4 rounded-md mt-4">
+            <button 
+              onClick={handleResend}
+              className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+            >
+              Resend Verification Email
+            </button>
+          </div>
+            )}
+
 
 
           <button
