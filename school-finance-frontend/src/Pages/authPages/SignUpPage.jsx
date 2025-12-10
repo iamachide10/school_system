@@ -6,7 +6,7 @@ const SignUp=()=>{
     const [email, setEmail]=useState("")
     const [password,setPassword]=useState("")
     const [role,setRole]=useState("")
-    const [selectedClassId ,setSelectedClassId]=useState(0)
+    const [selectedClassId ,setSelectedClass]=useState(0)
     const [isTeacher,setIsTeacher]=useState(false)
     const [classes,setClasses]=useState([])
     const [loading,setLoading]=useState(false)
