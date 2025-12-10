@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import FullScreenLoader from "../../components/loader";
 
 export const SessionPage = () => {
   const { class_id, teacher_id } = useParams();
@@ -211,7 +212,7 @@ const handleFinishSession =async () => {
     
 
 
-  if (loading) return <p className="mt-[6rem]">Loading session...</p>;
+  if (loading) return <FullScreenLoader />;
 
   return (
     <div className= "mt-[4rem] p-6">

@@ -6,13 +6,11 @@ import { useAuth } from "../../context/authContext";
 const EmailVerification = () => {
   const { token } = useParams();
   const navigate = useNavigate();
-
   const {login}=useAuth()
   const [status, setStatus] = useState("loading"); 
 
   useEffect(() => {
     const verifyToken = async () => {
-      console.log(token);
       
       try {
         const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/users/verify_email/${token}`)
@@ -26,8 +24,7 @@ const EmailVerification = () => {
           // OPTIONAL: auto login here if you want
           // navigate("/dashboard")
         } else {
-          setStatus("error");
-          
+          setStatus("error"); 
         }
       } catch (err) {
         setStatus("error");
@@ -59,12 +56,12 @@ const EmailVerification = () => {
               Your email has been successfully verified. You can now log in.
             </p>
 
-            <button
+            {/* <button
               onClick={() => navigate("/login")}
               className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl text-lg font-semibold"
             >
               Continue to Login
-            </button>
+            </button> */}
           </>
         )}
 

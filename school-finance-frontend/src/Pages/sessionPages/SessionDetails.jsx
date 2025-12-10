@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import FullScreenLoader from "../../components/loader";
 
 export default function SessionDetails() {
   const { session_id } = useParams();
@@ -44,7 +45,7 @@ export default function SessionDetails() {
   const totalPaid = paidStudents.reduce((acc, s) => acc + Number(s.fee_amount), 0);
   const totalUnpaid = unpaidStudents.reduce((acc, s) => acc + Number(s.fee_amount), 0);
 
-  if (loading) return <p className="text-center mt-6">Loading...</p>;
+  if (loading) return <FullScreenLoader/>;
 
   return (
     <div className="p-6">

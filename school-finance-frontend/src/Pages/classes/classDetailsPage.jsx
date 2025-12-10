@@ -2,16 +2,19 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect ,useState} from "react";
 import { useAuth } from "../../context/authContext";
 import { apiFetch } from "../../utils/apiFetch";
+import FullScreenLoader from "../../components/loader";
 
 export default function ClassDetails() {
   const [message,setMessage]=useState("")
-   const {token,userId}=useAuth()
+  const {userId}=useAuth()
+  const [loading,setLoading]=useState(false)
 
   const { id } = useParams();
   const navigate = useNavigate();
 
    useEffect(() => {
     const getClassStudents=async()=>{
+      setLoading(true)
   try{
         const res= await apiFetch(`/student/get_class_students/${id}` ,
           { 
@@ -28,9 +31,11 @@ export default function ClassDetails() {
       }catch(e){
         console.log(e);
       }  
+      setLoading(false)
       }
       getClassStudents()
   }, [id]);
+  if(loading) return <FullScreenLoader/>
   if(message){
     return     <h1 className="mt-[9rem] w-full text-center text-3xl font-bold text-red-700 ">{message}</h1>
   }

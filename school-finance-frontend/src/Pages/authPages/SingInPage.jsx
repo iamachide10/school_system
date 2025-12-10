@@ -1,12 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
+import FullScreenLoader from "../../components/loader";
 
 
 
 export default function LoginForm() {
     const [email, setEmail]=useState("")
     const [password,setPassword]=useState("")
+    const [loading,setLoading]=useState(false)
 
 
     const {login}=useAuth()
@@ -18,8 +20,6 @@ export default function LoginForm() {
             email,
             password,
         } 
-
-
         const url = "https://school-system-backend-78p1.onrender.com/api/users/login"
         const option ={
           method:"POST" ,
@@ -30,6 +30,7 @@ export default function LoginForm() {
           body:JSON.stringify({data})
         } 
         try{
+          setLoading(true)
           const res= await fetch(url ,option)
           const data=await res.json()
           if(res.ok){
@@ -40,7 +41,11 @@ export default function LoginForm() {
         }catch(e){
           console.log(e);
         }
+        setLoading(false)
   }
+
+
+  if(loading) return <FullScreenLoader/>;
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-white p-4">
       <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 space-y-6 border border-green-200">

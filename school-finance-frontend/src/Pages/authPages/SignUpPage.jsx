@@ -1,4 +1,5 @@
 import { useState ,useEffect} from "react"
+import FullScreenLoader from "../../components/loader"
 
 const SignUp=()=>{
     const [name,setName]=useState("")
@@ -8,9 +9,11 @@ const SignUp=()=>{
     const [selectedClassId ,setSelectedClass]=useState(0)
     const [isTeacher,setIsTeacher]=useState(false)
     const [classes,setClasses]=useState([])
+    const [loading,setLoading]=useState(false)
 
     useEffect(()=>{
         const getStudentsClasses=async()=>{
+            setLoading(true)
             try{
                 const request= await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
                 const data= await request.json()
@@ -21,6 +24,7 @@ const SignUp=()=>{
             }catch(e){
                 console.log(e);
             }
+            setLoading(false)
         }
         getStudentsClasses()
     },[])
@@ -44,10 +48,6 @@ const SignUp=()=>{
             role,
             ...(isTeacher && {selectedClassId})
         } 
-
-
-      
-        
         const url= "https://school-system-backend-78p1.onrender.com/api/users/register"
         const options={
             method:"POST",
@@ -58,6 +58,7 @@ const SignUp=()=>{
             credentials:"include",
             body: JSON.stringify(data)
         }
+        setLoading(true)
         try{
             const result = await fetch(url,options)
             if(result.ok){
@@ -66,8 +67,10 @@ const SignUp=()=>{
         }catch(e){
             alert(e)
         }
+        setLoading(false)
     }
 
+    if(loading) return <FullScreenLoader/>
 
     return(
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-whit

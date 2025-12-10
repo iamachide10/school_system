@@ -1,14 +1,16 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {StudentCard} from "../../components/studentCard"
+import {StudentCard} from "../../components/studentCard";
 import { useAuth } from "../../context/authContext";
 import { apiFetch } from "../../utils/apiFetch";
+import FullScreenLoader from "../../components/loader";
 
 export default function StudentsList() {
   const { id } = useParams();
   const [students, setStudents] = useState([]);
   const [message,setMessage]=useState("")
-    const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
+  const [loading,setLoading]=useState(false)
 
 
 
@@ -19,12 +21,10 @@ export default function StudentsList() {
 
    
 
-  const {token}=useAuth()
 
   useEffect(() => {
     const getClassStudents=async()=>{
-      console.log(token);
-      
+      setLoading(true)
       try{
        const res= await apiFetch(`/student/get_class_students/${id}` ,
           { 
@@ -44,10 +44,14 @@ export default function StudentsList() {
         }
       }catch(e){
         console.log(e);
-      }   
+      }
+      
+      setLoading(false)
       }
       getClassStudents()
   }, [id]);
+
+  if(loading) return <FullScreenLoader/>;
 
   return (
     <div className="mt-[4rem] min-h-screen bg-gradient-to-br from-green-50 to-white p-6">

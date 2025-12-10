@@ -1,4 +1,5 @@
 import { useState ,useEffect} from "react";
+import FullScreenLoader from "../../components/loader";
 
 
 export const AddStudent=()=>{
@@ -6,19 +7,22 @@ export const AddStudent=()=>{
     const[defaultFee,setDefaultFee]=useState(0)
     const [selectedClassId,setSelectedClass]=useState("")
     const [classes ,setClasses]=useState([])
+    const [loading,setLoading]=useState(false)
 
 
     useEffect(()=>{
-            const getStudentsClasses=async()=>{
-                try{
-                    const request= await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
-                    const data= await request.json()
-                    if(request.ok){
-                        setClasses(data.result) 
+        const getStudentsClasses=async()=>{
+              setLoading(true)
+            try{
+              const request= await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
+              const data= await request.json()
+               if(request.ok){
+                setClasses(data.result) 
                     }
-                }catch(e){
-                    console.log(e);
-                }
+            }catch(e){
+          console.log(e);
+            }
+              setLoading(false)
             }
             getStudentsClasses()
       },[])
@@ -54,7 +58,7 @@ export const AddStudent=()=>{
 
     }
 
-    
+    if(loading) return <FullScreenLoader/>
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-white p-4">
         <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 space-y-6 border border-green-200">

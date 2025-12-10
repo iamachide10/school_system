@@ -2,18 +2,27 @@ import { useState } from "react";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const [loading,setLoading]=useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
+    try{
+      const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/request-reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if(res.ok){
+        alert(data.msg);
+      }
 
-    const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/request-reset", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    }catch(e){
+      console.log(e);
+    }
+    setLoading(false)
 
-    const data = await res.json();
-    alert(data.msg);
   };
 
   return (

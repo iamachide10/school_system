@@ -1,6 +1,8 @@
 import { useState,useEffect } from "react";
 import { Edit3, User, Layers } from "lucide-react";
 import { useParams } from "react-router-dom";
+import FullScreenLoader from "../../components/loader";
+
 
 
 
@@ -12,7 +14,6 @@ export default function StudentProfile() {
     const [open, setOpen] = useState(false);
     const [editName, setEditName] = useState(false);
     const [editFee, setEditFee] = useState(false);
-  
     const [name, setName] = useState(student.full_name);
     const [fee, setFee] = useState(student.default_fees);
 
@@ -39,7 +40,7 @@ export default function StudentProfile() {
 
 
   const handleSave = async() => {
-
+    setLoading(true)
     try{
       const res= await fetch("https://school-system-backend-78p1.onrender.com/api/student/update_info" ,{
         method:"POST",
@@ -59,9 +60,10 @@ export default function StudentProfile() {
     }
     setEditName(false);
     setEditFee(false);
+    setLoading(false)
   };
 
-   if (loading) return <p className="mt-[6rem]">Loading session...</p>;
+   if (loading) return <FullScreenLoader/>;
 
   return (
     <div className="w-full max-w-md mx-auto mt-[6rem]">

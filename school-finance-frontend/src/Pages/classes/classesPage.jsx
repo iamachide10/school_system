@@ -1,13 +1,16 @@
 
 import { useEffect, useState } from "react";
 import { ClassCard } from "../../components/classCard";
+import FullScreenLoader from "../../components/loader";
 
 export  const Classes=()=> {
     //localStorage.removeItem("token");
   const [classes, setClasses] = useState([]);
+  const [loading,setLoading]=useState(false)
 
   useEffect(()=>{
     const getAllClasses=async()=>{
+      setLoading(true)
       try{
 
         const result =await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
@@ -20,12 +23,13 @@ export  const Classes=()=> {
         console.log("Error :" ,e);
         
       }
+      setLoading(false)
     }
     getAllClasses() 
   },[])
 
 
-
+  if(loading) return <FullScreenLoader/>
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white p-6">

@@ -1,6 +1,7 @@
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import FullScreenLoader from "../../components/loader";
 
 export default function ResetPassword() {
     
@@ -9,6 +10,7 @@ export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [valid, setValid] = useState(false);
+  const [loading,setLoading]=useState(false)
   const [userId,setUserId]=useState(null)
   const { token } = useParams();
 
@@ -16,16 +18,21 @@ export default function ResetPassword() {
 
 useEffect(()=>{
       const verifyToken=async ()=>{
-        console.log(token);
-        const res=await fetch(`https://school-system-backend-78p1.onrender.com/api/users/verify_reset_token/${token}`)
-           const data = await res.json()
-           if(res.ok){
-            console.log(data);
-            setUserId(data.userId)
-            if(data.valid){
-                setValid(true)
+        setLoading(true)
+        try{
+          const res=await fetch(`https://school-system-backend-78p1.onrender.com/api/users/verify_reset_token/${token}`)
+             const data = await res.json()
+             if(res.ok){
+              console.log(data);
+              setUserId(data.userId)
+              if(data.valid){
+                  setValid(true)
+              }
             }
-           }
+        }catch(e){
+          console.log(e);
+        }
+        setLoading(false)
         }
         verifyToken()
 },[token])
@@ -39,15 +46,26 @@ useEffect(()=>{
       return;
     }
 
-    const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/reset_password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ newPassword,userId})
-    });
+    setLoading(true)
+    try{
+      const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/reset_password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPassword,userId})
+      });
+  
+      const data = await res.json();
+      if(res.ok){
+        window.location.href = "/signin"
+      }
+    }catch(e){
+      console.log(e);
+      
+    }
+    setLoading(false)
 
-    const data = await res.json();
-    alert(data.msg);
   };
+   if(loading) return <FullScreenLoader/>;
     
   if (!valid) return <h1 className=" mt-[6rem]  w-full text-center text-3xl font-bold text-red-700">Invalid or expired link</h1>;
 

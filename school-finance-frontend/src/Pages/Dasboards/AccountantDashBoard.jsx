@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 //import { Card, CardContent } from "@/components/ui/card";
 import SessionCard from "../../components/sessionCard";
+import FullScreenLoader from "../../components/loader";
 
 export default function AccountDashboard() {
   const [sessions, setSessions] = useState([]);
@@ -14,6 +15,7 @@ export default function AccountDashboard() {
   }, []);
 
   const fetchPendingSessions = async () => {
+    setLoading(true)
     try {
       const res = await fetch("https://school-system-backend-78p1.onrender.com/api/session/get_pending_session");
       const data = await res.json();
@@ -29,6 +31,7 @@ export default function AccountDashboard() {
     setLoading(false);
   };
 
+  if(loading) return <FullScreenLoader/>;
 
   return (
     <div className="mt-[4rem] min-h-screen bg-gradient-to-br from-green-50 to-white p-6">

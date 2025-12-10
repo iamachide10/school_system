@@ -33,7 +33,7 @@ export default function App() {
       }
     },[user])
  
-  
+
 
   return (
     <div>
@@ -45,6 +45,8 @@ export default function App() {
       <Route path="/signup" element={  <SignUp/>  } />
       <Route path="/verify_email/:token" element={  <EmailVerification/>  } />
       <Route path="/classes/:id" element={  <ClassDetails/>  } />
+      {/* <Route path="/test-loader" element={  <FullScreenLoader/>  } /> */}
+
       <Route path="/session/:session_id" element={  <SessionDetails/>  } />
       <Route path="/classes/students/:id" element={  <StudentsList/>  } />
       <Route path="/classes/sessions/:class_id/:teacher_id" element={  <SessionPage/>  } />
