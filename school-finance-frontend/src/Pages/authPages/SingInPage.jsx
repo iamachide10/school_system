@@ -55,7 +55,7 @@ export default function LoginForm() {
     }
 
     // SUCCESS → Log user in
-    login(result.existingUser);
+    login(result);
 
     setSuccess("Login successful! Redirecting...");
     console.log("Logged in:", result);
