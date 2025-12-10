@@ -100,7 +100,7 @@ const togglePaid = (id) => {
 
   // SUBMIT FEES (temporary empty logic)
 const handleSubmit = async () => {
-  if (!sessionId) return alert("Session ID missing");
+  if (!sessionId) return ;
   if (loading) return;   // Prevent double-click
   setLoading(true);
   // Convert students safely
@@ -141,35 +141,39 @@ const handleSubmit = async () => {
   useEffect(() => {
     if (!sessionId) return;
   
-    const fetchSessionRecords = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${sessionId}/records`);
-        const data = await res.json();
-        console.log("Data received",data);
-        
-        if (!data || data.length === 0) {
-          setLoading(false);
-          return;
-        }
+  const fetchSessionRecords = async () => {
+  setLoading(true);
 
-        
-  
-        setStudents(data.map(r => ({
+  try {
+    const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${sessionId}/records`);
+    const data = await res.json();
+
+    // 🔥 If session has records → use them
+    if (Array.isArray(data) && data.length > 0) {
+      setStudents(
+        data.map(r => ({
           id: Number(r.student_id),
           full_name: r.full_name,
           student_code: r.student_code,
           default_fees: Number(r.default_fees ?? r.fee_amount),
           has_paid: Boolean(r.has_paid)
-        })));
-  
-      } catch (err) {
-        console.error("fetchSessionRecords error:", err);
-      }
+        }))
+      );
+
       setLoading(false);
-      setShouldRefresh(false); // RESET
-    };
-  
+      return;
+    }
+
+    // 🔥 If NO records → load class students instead
+    await loadStudents();
+
+  } catch (err) {
+    console.error("fetchSessionRecords error:", err);
+  }
+  setLoading(false);
+  setShouldRefresh(false);
+};
+
     fetchSessionRecords();
   }, [ shouldRefresh]);
   
