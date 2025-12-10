@@ -135,7 +135,7 @@ export const logUser = async (req, res) => {
     return res.status(200).json({
       status: "success",
       message: "Login successful.",
-      user: {
+      existingUser: {
         id: existingUser.id,
         name: existingUser.name,
         email: existingUser.email,

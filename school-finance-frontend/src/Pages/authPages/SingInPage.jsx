@@ -61,9 +61,7 @@ export default function LoginForm() {
     console.log("Logged in:", result);
 
     // Optional: Redirect after login
-    setTimeout(() => {
-      window.location.href = "/dashboard";
-    }, 700);
+  
 
   } catch (err) {
     console.error("Login error:", err);
