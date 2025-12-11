@@ -71,6 +71,7 @@ export const getRecordsByIdModel = async (sessionId) => {
       ORDER BY s.id ASC;
     `;
     const { rows } = await pool.query(query, [sessionId]);
+
     return rows;
         
   } catch (error) {

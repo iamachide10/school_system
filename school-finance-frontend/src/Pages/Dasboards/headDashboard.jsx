@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { DollarSign, AlertTriangle, Users, CheckCircle } from "lucide-react";
 
 export default function HeadmistressDashboard() {
+  const [loading,setLoading]=useState(false)
   const [stats, setStats] = useState({
     today: 0,
     month: 0,
@@ -11,6 +12,7 @@ export default function HeadmistressDashboard() {
   useEffect(() => {
 
     const fetchStats = async () => {
+      setLoading(true)
       try {
         const res = await fetch("https://school-system-backend-78p1.onrender.com/admin/dashboard/summary");
         const data = await res.json();
@@ -20,10 +22,11 @@ export default function HeadmistressDashboard() {
       } catch (error) {
         console.error("Error fetching headmistress stats", error);
       }
+      setLoading(false)
     };
-
     fetchStats();
   }, []);
+    if(loading) return <FullScreenLoader/>;
 
   return (
     <div className="mt-[6rem] p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

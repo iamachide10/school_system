@@ -12,6 +12,7 @@ export const getDashboardSummary = async (req, res) => {
     const pending = await getPendingSessionsCount();
     const unpaid = await getUnpaidStudentsCount();
 
+    
     res.json({
       message: "Dashboard summary loaded",
       summary: {
