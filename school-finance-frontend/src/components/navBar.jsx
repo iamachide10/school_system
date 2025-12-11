@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/authContext";
+import FullScreenLoader from "./loader";
 
 
 
@@ -17,6 +18,7 @@ const navLinks = {
 export default function Navbar({ isLoggedIn }) {
   const {logOut ,user} =useAuth()
   const [open, setOpen] = useState(false);
+  const [loading,setLoading]=useState(false)
   const linksToShow = isLoggedIn ? navLinks.private : navLinks.public;
 
   const logOutFunction=async()=>{
@@ -26,16 +28,21 @@ export default function Navbar({ isLoggedIn }) {
         credentials:"include",
     }
     try{
+      setLoading(true)
         const res= await fetch(url ,options)
         const data= await res.json()
         if(res.ok){
+          setLoading(false)
             console.log(data.message);
             logOut()
         }
     }catch(e){
         console.log(e);
     }
+    setLoading(false)
   }
+
+  if(loading) return <FullScreenLoader/>;
 
 
   return (

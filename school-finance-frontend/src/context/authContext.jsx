@@ -1,5 +1,6 @@
 import { useContext, createContext, useEffect, useState } from "react"
 
+
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
@@ -54,3 +55,9 @@ return (
 }
 
 export const useAuth = () => useContext(AuthContext)
+
+
+export const isAuthenticated = () => {
+  const token = localStorage.getItem("token");
+  return !!token;
+};

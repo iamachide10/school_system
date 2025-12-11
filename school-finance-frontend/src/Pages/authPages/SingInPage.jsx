@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
+import { isAuthenticated } from "../../context/authContext";
 
 
 
@@ -13,9 +14,32 @@ export default function LoginForm() {
   const [success, setSuccess] = useState("");
   const [showVerifyBox,setShowVerifyBox  ]=useState(false)
   const [unverifiedEmail,setUnverifiedEmail]=useState("")
+
+
+
+
+
+  useEffect(() => {
+    setLoading(true)
+    if (isAuthenticated()) {
+      const role = localStorage.getItem("role");
+      if (role === "teacher") {
+        setLoading(false)
+        window.location.href = "/classes";
+      } else if (role === "accountant") {
+        setLoading(false)
+        window.location.href = "/accountant-dashboard";
+      } else {
+        setLoading(false)
+        window.location.href = "/head-dashboard";
+      }
+    }
+  }, []);
+
+  
   
 
-    const {login}=useAuth()
+  const {login}=useAuth()
 
  const handleSubmit = async (e) => {
   e.preventDefault();
