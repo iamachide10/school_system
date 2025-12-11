@@ -122,10 +122,10 @@ export const logUser = async (req, res) => {
     await saveRefreshToken(id, tokenHash, tokenPrefix, role);
 
     // SET REFRESH COOKIE
-    res.cookie("refreshToken", refreshToken, {
+     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,          // use TRUE in production with HTTPS
-      sameSite: "Strict",
+      secure: true,        // IMPORTANT ON PRODUCTION
+      sameSite: "none",    // REQUIRED for frontend-backend cross domain
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 

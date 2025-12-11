@@ -6,14 +6,14 @@ import FullScreenLoader from "../../components/loader";
 
 
 export default function LoginForm() {
-    const [email, setEmail]=useState("")
-    const [password,setPassword]=useState("")
-    const [loading,setLoading]=useState(false)
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
-    const [showVerifyBox,setShowVerifyBox  ]=useState(false)
-    const [unverifiedEmail,setUnverifiedEmail]=useState("")
-
+  const [email, setEmail]=useState("")
+  const [password,setPassword]=useState("")
+  const [loading,setLoading]=useState(false)
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [showVerifyBox,setShowVerifyBox  ]=useState(false)
+  const [unverifiedEmail,setUnverifiedEmail]=useState("")
+  
 
     const {login}=useAuth()
 

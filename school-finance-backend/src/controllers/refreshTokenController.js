@@ -6,57 +6,51 @@ import bcrypt from "bcryptjs";
 
 
 
+ 
+export const refreshTokenController = async (req, res) => {
+  try {
+    const oldRefreshToken = req.cookies.refreshToken;
 
-export const refreshTokenController= async (req, res)=>{
-    
-    
-    try {
-        const refreshTokens = req.cookies.refreshToken
-        console.log(refreshTokens);
-        
-    
-        if (!refreshTokens) {
-            return res.status(401).json({ message: "Refresh token not found" });
-        }
-        const tokenPrefix = refreshTokens.slice(0, 10);
-        const storedToken= await getRefreshToken(tokenPrefix);
+    if (!oldRefreshToken) {
+      return res.status(401).json({ message: "No refresh token" });
+    }
 
-        if (!storedToken) {
-            return res.status(403).json({ message: "Invalid refresh token" });
-        }   
+    const prefix = oldRefreshToken.slice(0, 10);
+    const stored = await getRefreshToken(prefix);
 
-        const isMatch = await bcrypt.compare(refreshTokens, storedToken.token_hash);
-        console.log("Is Match:", isMatch);
-        if (!isMatch) {
-            return res.status(403).json({ message: "Invalid refresh token" });
+    if (!stored) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
 
-        }
+    const isMatch = await bcrypt.compare(oldRefreshToken, stored.token_hash);
+    if (!isMatch || stored.replace_by) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
 
-        if(storedToken.replace_by){
-              return res.status(403).json({ message: "Invalid refresh token" });
-        }
+    // ---- Generate new tokens ----
+    const { refreshToken: newRefreshToken, tokenHash, tokenPrefixs } = signRefreshToken();
+    const newRecord = await saveRefreshToken(stored.user_id, tokenHash, tokenPrefixs);
 
-        const { refreshToken, tokenHash,tokenPrefixs }=signRefreshToken();
+    // Update old token as replaced
+    await editTokenStatus(newRecord.id, stored.id);
 
-        const userId = storedToken.user_id;
+    // ---- SEND NEW REFRESH TOKEN TO BROWSER ----
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: true,        // IMPORTANT ON PRODUCTION
+      sameSite: "none",    // REQUIRED for frontend-backend cross domain
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
 
-        const newRefreshToken= await saveRefreshToken(userId ,tokenHash,tokenPrefixs)
+    const accessToken = createAccessToken({
+      id: stored.user_id,
+      role: stored.user_role
+    });
 
-        const newTokenId=newRefreshToken.id
-        const oldTokenId = storedToken.id
-        await editTokenStatus(newTokenId,oldTokenId)
-        console.log("Stored Token",storedToken);
-        
-        const id = storedToken.user_id;
-        const role = storedToken.user_role;
-        
-        
-        const accessToken = createAccessToken({ id, role });
-        return res.status(200).json({ accessToken });
+    return res.status(200).json({ accessToken });
 
-    } catch (error) {
-        console.error("Error refreshing token:", error);
-        return res.status(500).json({ message: "Internal server error" });
-    }   
-}
-
+  } catch (error) {
+    console.log("Refresh error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

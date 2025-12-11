@@ -8,10 +8,9 @@ export default function HeadmistressDashboard() {
     today: 0,
     month: 0,
     pending: 0,
-  });
+  }); 
 
   useEffect(() => {
-
     const fetchStats = async () => {
       setLoading(true)
       try {
@@ -27,7 +26,9 @@ export default function HeadmistressDashboard() {
     };
     fetchStats();
   }, []);
-    if(loading) return <FullScreenLoader/>;
+  
+  if(loading) return <FullScreenLoader/>;
+
 
   return (
     <div className="mt-[6rem] p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
