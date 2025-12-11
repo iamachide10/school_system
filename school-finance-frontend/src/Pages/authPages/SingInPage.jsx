@@ -88,9 +88,11 @@ const handleResend = async () => {
       if (!res.ok) {
         setLoading(false);
         setSuccess("")
+        setShowVerifyBox(false)
         return setError(data.message || "Invalid login details.");
       }
       else{
+        setShowVerifyBox(false)
         setLoading(false)
         setError("")
         return setSuccess(data.message)
@@ -98,8 +100,6 @@ const handleResend = async () => {
     } catch (e) {
       alert("Error sending verification email");
     }
-    setShowVerifyBox(false)
-    setLoading(false);
 };
 
 
