@@ -246,3 +246,38 @@ export const changePasswordController=async(req,res)=>{
 
 
 
+
+
+
+export const resendVerificationController = async (req, res) => {
+  const { unverifiedEmail } = req.body;
+
+  try {
+    const user = await getUser(unverifiedEmail);
+    
+    if (!user) return res.status(400).json({ message: "Email not found" });
+    if (user.verified) {
+      return res.status(400).json({ message: "Account already verified" });
+    }
+    const { token ,expressAt} = generateVerificationToken();
+    await saveResetToken(token, expressAt, user.id);
+
+
+    await sendEmail(
+      unverifiedEmail,
+      "Verify your School System account",
+      "Please verify your email address",
+      user.name,
+      token,
+      "verifyEmail"
+    );
+
+       return res.status(200).json({
+      status: "success",
+      message: "Verification link sent successfully, Check your email to verify your account.",
+    });
+
+  } catch (e) {
+    res.status(500).json({ message: "Could not resend verification email" });
+  }
+};

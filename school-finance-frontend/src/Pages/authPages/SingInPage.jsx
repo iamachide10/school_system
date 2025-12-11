@@ -12,6 +12,7 @@ export default function LoginForm() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [showVerifyBox,setShowVerifyBox  ]=useState(false)
+    const [unverifiedEmail,setUnverifiedEmail]=useState("")
 
 
     const {login}=useAuth()
@@ -47,9 +48,10 @@ export default function LoginForm() {
       // Unverified account
       setLoading(false);
       if (result.status === "unverified") {
+        setUnverifiedEmail(email)
         setShowVerifyBox(true);
         return setError(
-          "Your email is not verified. Please check your inbox to verify your account."
+          "Your email is not verified. Please click on the button to resend verification."
         );
       }
       // General errors (wrong password, user doesn't exist, etc.)
@@ -76,20 +78,27 @@ export default function LoginForm() {
 
 const handleResend = async () => {
   setLoading(true);
-
     try {
-      const res = await fetch("/api/auth/resend_verification", {
+      const res = await fetch("/api/users/resend_verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ unverifiedEmail })
       });
-
       const data = await res.json();
-      alert(data.message);
+      if (!res.ok) {
+        setLoading(false);
+        setSuccess("")
+        return setError(data.message || "Invalid login details.");
+      }
+      else{
+        setLoading(false)
+        setError("")
+        return setSuccess(data.message)
+      }
     } catch (e) {
       alert("Error sending verification email");
     }
-
+    setShowVerifyBox(false)
     setLoading(false);
 };
 

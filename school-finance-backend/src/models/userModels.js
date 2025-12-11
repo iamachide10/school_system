@@ -54,7 +54,6 @@ export const saveResetToken=async(token,tokenExpiry,userId)=>{
         console.log("Server Error" ,e);
         
     }
-
 }
 
 export const changePasswordModel=async(userId,password)=>{
