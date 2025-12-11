@@ -79,7 +79,7 @@ export default function LoginForm() {
 const handleResend = async () => {
   setLoading(true);
     try {
-      const res = await fetch("/api/users/resend_verification", {
+      const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/resend_verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ unverifiedEmail })
