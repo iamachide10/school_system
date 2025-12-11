@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import FullScreenLoader from "../../components/loader";
 import { DollarSign, AlertTriangle, Users, CheckCircle } from "lucide-react";
 
 export default function HeadmistressDashboard() {
