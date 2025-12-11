@@ -11,6 +11,7 @@ const [userId, setUserId] = useState("")
 const login = (userData) => {
 console.log(userData.existingUser.id)
 localStorage.setItem("user_id", String(userData.existingUser.id))
+localStorage.setItem("role",userData.existingUser.role)
 localStorage.setItem("user", userData.existingUser.name)
 localStorage.setItem("token", userData.existingUser.token)  
 if(userData.existingUser.role==="teacher"){
