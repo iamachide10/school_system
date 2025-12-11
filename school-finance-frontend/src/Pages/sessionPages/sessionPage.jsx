@@ -241,11 +241,11 @@ const handleFinishSession =async () => {
         <h2 className="text-xl font-bold text-red-700">{studentsLeftToPay}</h2>
       </div>
 
-      {/* Amount Received */}
+
       <div className="flex-1 min-w-[150px] bg-yellow-50 border border-yellow-200 rounded-lg p-3 shadow-sm">
         <p className="text-xs text-yellow-600">Amount Received</p>
         <h2 className="text-xl font-bold text-yellow-700">
-        ?  GH₵ {Number(amountReceived).toFixed(2)}
+          GH₵ {Number(amountReceived).toFixed(2)}
         </h2>
       </div>
     </div>

@@ -16,6 +16,9 @@ if(userData.existingUser.role==="teacher"){
   window.location.href="/classes"// FIXED
 }else if(userData.existingUser.role==="accountant"){
     window.location.href="/accountant-dashboard"
+  }else {
+  window.location.href="/head-dashboard"
+  
 }
 
 }
