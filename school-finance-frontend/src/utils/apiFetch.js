@@ -14,7 +14,6 @@ let response = await fetch(`https://school-system-backend-78p1.onrender.com/api$
 if (response.status === 401) {
 console.log("Access token expired, refreshing...")
 
-
 const refreshRes = await fetch("https://school-system-backend-78p1.onrender.com/api/refresh_token", {
   method: "POST",
   credentials: "include",
@@ -26,8 +25,11 @@ if (!refreshRes.ok) {
 }
 
 const data = await refreshRes.json()
+console.log(data);
+
 
 localStorage.setItem("token", data.accessToken)   // FIXED
+
 
 options.headers.Authorization = `Bearer ${data.accessToken}`
 

@@ -12,9 +12,7 @@ export const refreshTokenController = async (req, res) => {
     
   try {
     const oldRefreshToken = req.cookies.refreshToken;
-    console.log("Refresh token Received " , oldRefreshToken);
     
-
     if (!oldRefreshToken) {
       return res.status(401).json({ message: "No refresh token" });
     }
@@ -23,17 +21,25 @@ export const refreshTokenController = async (req, res) => {
     const stored = await getRefreshToken(prefix);
 
     if (!stored) {
+        console.log("Token not found");
+        
       return res.status(403).json({ message: "Invalid refresh token" });
     }
 
     const isMatch = await bcrypt.compare(oldRefreshToken, stored.token_hash);
+
     if (!isMatch || stored.replace_by) {
+        console.log("Refresh token mismatch or already replaced");
       return res.status(403).json({ message: "Invalid refresh token" });
     }
 
+    console.log(isMatch);
+    
     // ---- Generate new tokens ----
     const { refreshToken: newRefreshToken, tokenHash, tokenPrefixs } = signRefreshToken();
     const newRecord = await saveRefreshToken(stored.user_id, tokenHash, tokenPrefixs);
+    console.log("New token",newRecord);
+    
 
     // Update old token as replaced
     await editTokenStatus(newRecord.id, stored.id);
