@@ -11,7 +11,7 @@ dotenv.config()
 export const createAccessToken=(data)=>{
     const secrete=process.env.JWT_SECRETE
     const expiresIn=process.env.JWT_EXPIRES_IN
-    const token=jwt.sign(data, secrete ,{expiresIn}) //{expiresIn:"1h"}
+    const token=jwt.sign(data, secrete ,{expiresIn}) 
     return token
 }
 

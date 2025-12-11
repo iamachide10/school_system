@@ -8,8 +8,12 @@ import bcrypt from "bcryptjs";
 
  
 export const refreshTokenController = async (req, res) => {
+    console.log("About to refresh token ");
+    
   try {
     const oldRefreshToken = req.cookies.refreshToken;
+    console.log("Refresh token Received " , oldRefreshToken);
+    
 
     if (!oldRefreshToken) {
       return res.status(401).json({ message: "No refresh token" });
