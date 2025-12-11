@@ -33,8 +33,8 @@ export default function LoginForm() {
         setLoading(false)
         window.location.href = "/head-dashboard";
       }
-    setLoading(false)
     }
+    setLoading(false)
   }, []);
 
   
