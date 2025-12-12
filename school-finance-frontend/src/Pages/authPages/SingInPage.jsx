@@ -18,7 +18,7 @@ export default function LoginForm() {
   const [unverifiedEmail,setUnverifiedEmail]=useState("")
   
   const navigate = useNavigate();
-  const {login,role}=useAuth()
+  const {login}=useAuth()
 
 
 
@@ -26,6 +26,7 @@ export default function LoginForm() {
 useEffect(() => {
   setLoading(true)
   if (isAuthenticated()) {
+    const role = localStorage.getItem("role")
     const redirectMap = {
       teacher: "/classes",
       accountant: "/accountant-dashboard",
