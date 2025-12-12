@@ -70,3 +70,8 @@ export const updateStudentInfoModel=async(studentId,defaultFee)=>{
         console.log("Error occured at Model" ,e);
     }
 }
+
+// export const getStudentByName=async(name)=>{
+//     try
+
+// }

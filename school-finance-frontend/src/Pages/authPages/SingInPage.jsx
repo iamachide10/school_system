@@ -29,7 +29,7 @@ useEffect(() => {
     const redirectMap = {
       teacher: "/classes",
       accountant: "/accountant-dashboard",
-      head: "/head-dashboard",
+      headmaster: "/head-dashboard",
     };
 
     navigate(redirectMap[role] || "/classes", { replace: true });

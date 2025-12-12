@@ -38,6 +38,8 @@ export const AddStudent=()=>{
         }catch(e){
           console.log(e);
         }
+        setFullName("")
+        defaultFee(0)
         setLoading(false)
     }
 
