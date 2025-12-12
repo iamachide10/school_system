@@ -15,7 +15,7 @@ export default function StudentProfile() {
     const [editName, setEditName] = useState(false);
     const [editFee, setEditFee] = useState(false);
     const [name, setName] = useState(student.full_name);
-    const [fee, setFee] = useState(student.default_fees);
+    const [fee, setFee] = useState();
 
     useEffect(()=>{
         const fetchStudent=async()=>{
@@ -26,6 +26,7 @@ export default function StudentProfile() {
         if(res.ok){
           console.log(data);
           setStudent(data.result) 
+          setFee(data.result.default_fees)
         }
       }catch(e){
         console.log(e);
