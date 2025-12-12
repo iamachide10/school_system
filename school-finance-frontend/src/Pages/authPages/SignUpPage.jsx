@@ -30,7 +30,7 @@ const SignUp=()=>{
           headmaster: "/head-dashboard",
         };
 
-        navigate(redirectMap[role] || "/classes", { replace: true });
+        navigate(redirectMap[role] , { replace: true });
         setLoading(false)
       }
       setLoading(false)
