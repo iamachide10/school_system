@@ -1,36 +1,20 @@
 import { useState ,useEffect} from "react";
 import FullScreenLoader from "../../components/loader";
-
+import { useParams } from "react-router-dom";
 
 export const AddStudent=()=>{
     const [fullName,setFullName]=useState("")
     const[defaultFee,setDefaultFee]=useState(0)
     const [selectedClassId,setSelectedClass]=useState("")
-    const [classes ,setClasses]=useState([])
     const [loading,setLoading]=useState(false)
+    const {class_id ,class_name}=useParams()
 
-
-    useEffect(()=>{
-        const getStudentsClasses=async()=>{
-              setLoading(true)
-            try{
-              const request= await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
-              const data= await request.json()
-               if(request.ok){
-                setClasses(data.result) 
-                    }
-            }catch(e){
-          console.log(e);
-            }
-              setLoading(false)
-            }
-            getStudentsClasses()
-      },[])
+    console.log(class_id ,class_name);
 
     const handleSubmmit=async(e)=>{
 
         const data={
-          selectedClassId,
+          class_id,
           defaultFee,
           fullName
         }
@@ -106,18 +90,9 @@ export const AddStudent=()=>{
             {/* Class Selection */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Class
+                Class: {class_name}
               </label>
-              <select
-                value={selectedClassId}
-                onChange={e => setSelectedClass(e.target.value)}
-                className="w-full px-4 py-2 border border-green-300 rounded-xl bg-white focus:ring-2 focus:ring-green-500 focus:outline-none"
-              >
-                <option value="">Select class</option>
-                {classes.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
+
             </div>
 
             <button

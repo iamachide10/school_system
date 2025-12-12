@@ -9,7 +9,7 @@ export default function ClassDetails() {
   const {userId}=useAuth()
   const [loading,setLoading]=useState(false)
 
-  const { id } = useParams();
+  const { id ,class_name} = useParams();
   const navigate = useNavigate();
 
    useEffect(() => {
@@ -42,7 +42,7 @@ export default function ClassDetails() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white p-6">
-      <h1 className="text-4xl font-bold text-green-700 text-center mb-10">
+      <h1 className="mt-[5rem] text-4xl font-bold text-green-700 text-center mb-10">
         Class Options
       </h1>
 
@@ -68,10 +68,23 @@ export default function ClassDetails() {
                      transition border border-green-100 hover:border-green-300"
         >
           <h2 className="text-2xl font-semibold text-green-700 mb-4">
-            Start Session
+             Sessions Page
           </h2>
           <p className="text-gray-600">
             Begin a new session and take student activity or financial records.
+          </p>
+        </div>
+
+        <div
+          onClick={() => navigate(`/classes/add_student/${id}/${class_name}`)}
+          className="cursor-pointer bg-white p-8 rounded-xl shadow hover:shadow-lg 
+                     transition border border-green-100 hover:border-green-300"
+        >
+          <h2 className="text-2xl font-semibold text-green-700 mb-4">
+             Add student 
+          </h2>
+          <p className="text-gray-600">
+           Add a new student to this class.
           </p>
         </div>
       </div>

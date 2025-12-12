@@ -44,13 +44,13 @@ export default function App() {
       <Route path="/students/profile/:student_id" element={  <StudentProfile />  } />
       <Route path="/signup" element={  <SignUp/>  } />
       <Route path="/verify_email/:token" element={  <EmailVerification/>  } />
-      <Route path="/classes/:id" element={  <ClassDetails/>  } />
+      <Route path="/classes/:id/:class_name" element={  <ClassDetails/>  } />
       {/* <Route path="/test-loader" element={  <FullScreenLoader/>  } /> */}
 
       <Route path="/session/:session_id" element={  <SessionDetails/>  } />
       <Route path="/classes/students/:id" element={  <StudentsList/>  } />
       <Route path="/classes/sessions/:class_id/:teacher_id" element={  <SessionPage/>  } />
-      <Route path="/add_student" element={  <AddStudent/>  } />
+      <Route path="/classes/add_student/:class_id/:class_name" element={  <AddStudent/>  } />
       <Route path="/add_class" element={  <CreateClass/>  } />
       <Route path="/forgot-password" element={  <ForgotPassword/>  } />
       <Route path="/classes" element={  <Classes/>  } />
