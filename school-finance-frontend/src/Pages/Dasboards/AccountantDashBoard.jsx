@@ -10,13 +10,13 @@ export default function AccountDashboard() {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const {role}=useAuth()
 
   const navigate = useNavigate()
 
   useEffect(() => {
     setLoading(true)
     if (isAuthenticated()) {
-      const {role}=useAuth()
   
       const redirectMap = {
         teacher: "/classes",

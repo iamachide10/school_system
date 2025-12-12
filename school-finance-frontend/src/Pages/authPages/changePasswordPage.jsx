@@ -2,7 +2,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FullScreenLoader from "../../components/loader";
-import { isAuthenticated } from "../../context/authContext";
+
 import { useNavigate } from "react-router-dom";
 
 export default function ResetPassword() {
@@ -17,23 +17,6 @@ export default function ResetPassword() {
   const { token } = useParams();
 
     const navigate = useNavigate();
-  useEffect(() => {
-    setLoading(true)
-    if (isAuthenticated()) {
-      const role = localStorage.getItem("role");
-  
-      const redirectMap = {
-        teacher: "/classes",
-        accountant: "/accountant-dashboard",
-        head: "/head-dashboard",
-      };
-  
-      navigate(redirectMap[role] || "/classes", { replace: true });
-      setLoading(false)
-    }
-    setLoading(false)
-  }, []);
-  
 
 
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
-import { isAuthenticated } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
 
 

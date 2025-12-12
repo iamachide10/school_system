@@ -11,6 +11,7 @@ export  const Classes=()=> {
     //localStorage.removeItem("token");
   const [classes, setClasses] = useState([]);
   const [loading,setLoading]=useState(false)
+  const {role}=useAuth()
 
   const navigate = useNavigate();
   
@@ -18,7 +19,6 @@ export  const Classes=()=> {
   useEffect(() => { 
     setLoading(true)
     if (isAuthenticated()) {
-        const {role}=useAuth()
 
         console.log(role);
         const redirectMap = {

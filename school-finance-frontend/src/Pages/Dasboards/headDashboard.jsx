@@ -7,6 +7,7 @@ import { useAuth } from "../../context/authContext";
 
 export default function HeadmistressDashboard() {
   const [loading,setLoading]=useState(false)
+  const {role}=useAuth()
   const [stats, setStats] = useState({
     today: 0,
     month: 0,
@@ -20,7 +21,6 @@ export default function HeadmistressDashboard() {
     useEffect(() => {
       setLoading(true)
       if (isAuthenticated()) {
-        const {role}=useAuth()
     
         const redirectMap = {
           teacher: "/classes",
