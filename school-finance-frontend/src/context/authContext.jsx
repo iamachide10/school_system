@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 const [user, setUser] = useState("")
 const [token, setToken] = useState("")
 const [userId, setUserId] = useState("")
-const [role,setRole]=useState(role)
+const [role,setRole]=useState("")
 
 const login = (userData) => {
 console.log(userData.existingUser.id)
