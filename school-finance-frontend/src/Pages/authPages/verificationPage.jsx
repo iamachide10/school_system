@@ -7,12 +7,12 @@ import FullScreenLoader from "../../components/loader";
 
 const EmailVerification = () => {
   const { token } = useParams();
-  const navigate = useNavigate();
   const {login}=useAuth()
   const [loading,setLoading]=useState(false)
   const [status, setStatus] = useState("loading"); 
-
-
+  
+  
+  const navigate = useNavigate();
 
 
   useEffect(() => {

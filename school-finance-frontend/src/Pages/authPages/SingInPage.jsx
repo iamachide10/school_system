@@ -4,7 +4,6 @@ import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
 import { isAuthenticated } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
-const navigate = useNavigate();
 
 
 
@@ -17,7 +16,8 @@ export default function LoginForm() {
   const [success, setSuccess] = useState("");
   const [showVerifyBox,setShowVerifyBox  ]=useState(false)
   const [unverifiedEmail,setUnverifiedEmail]=useState("")
-
+  
+  const navigate = useNavigate();
 
 
 

@@ -15,9 +15,9 @@ const SignUp=()=>{
     const [loading,setLoading]=useState(false)
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    
     const navigate = useNavigate();
-
-
+    
     useEffect(() => {
       setLoading(true)
       if (isAuthenticated()) {
