@@ -33,7 +33,7 @@ export const AddStudent=()=>{
         try{
           const res=await fetch(url ,options)
           if(res.ok){
-            alert("Yes")
+            alert("Student added successfully")
           }
         }catch(e){
           console.log(e);
