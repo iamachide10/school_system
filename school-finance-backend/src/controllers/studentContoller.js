@@ -16,7 +16,7 @@ export const createStudentController = async(req,res) =>{
     console.log("The Student ID:",studentId);
 
     const result = await createStudentModel(fullName,studentId,defaultFee,selectedClassId,nextSeq)
-   return res.status(200).json({result})
+   return res.status(200).json({message:"Student created successfully"})
   }catch(e){
   console.log("Error occured at create student controller",e)
   }

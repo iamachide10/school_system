@@ -5,11 +5,9 @@ import { useParams } from "react-router-dom";
 export const AddStudent=()=>{
     const [fullName,setFullName]=useState("")
     const[defaultFee,setDefaultFee]=useState(0)
-    const [selectedClassId,setSelectedClass]=useState("")
     const [loading,setLoading]=useState(false)
+    const [success,setSuccess]=useState("")
     const {class_id ,class_name}=useParams()
-
-    console.log(class_id ,class_name);
 
     const handleSubmmit=async(e)=>{
 
@@ -30,18 +28,19 @@ export const AddStudent=()=>{
             },
           body:JSON.stringify(data)
         }
+        setLoading(true)
         try{
           const res=await fetch(url ,options)
           if(res.ok){
-            alert("Student added successfully")
+            setLoading(false)
+            setSuccess("Student added successfully")
           }
         }catch(e){
           console.log(e);
         }
-
-        
-
+        setLoading(false)
     }
+
 
     if(loading) return <FullScreenLoader/>
     return (
@@ -102,6 +101,12 @@ export const AddStudent=()=>{
           >
             Add Student
           </button>
+
+            {success && (
+            <p className="text-green-600 text-sm mt-2 bg-green-100 p-2 rounded">
+              {success}
+            </p>
+            )}
     
           </div>
     
