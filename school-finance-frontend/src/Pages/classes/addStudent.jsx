@@ -14,10 +14,12 @@ export const AddStudent=()=>{
     const handleSubmmit=async(e)=>{
 
         const data={
-          class_id,
+          selectedClassId:class_id,
           defaultFee,
           fullName
         }
+
+        console.log(data);
 
         const url="https://school-system-backend-78p1.onrender.com/api/student/create_student"
 
@@ -35,7 +37,6 @@ export const AddStudent=()=>{
           }
         }catch(e){
           console.log(e);
-          
         }
 
         
