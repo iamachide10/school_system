@@ -26,6 +26,7 @@ export default function StudentProfile() {
         if(res.ok){
           console.log(data);
           setStudent(data.result) 
+          setFee(data.result.default_fees)
         }
       }catch(e){
         console.log(e);
@@ -145,8 +146,8 @@ export default function StudentProfile() {
                   onChange={(e) => setFee(Number(e.target.value))}
                   className="w-full mt-2 border border-green-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-400"
                 >
-                  <option value={fee}>{fee}</option>
-                  <option value={fee === 5 ? 11:5}>{fee === 5 ? 11:5}cedis</option>
+                  <option value={fee}>{fee} cedis</option>
+                  <option value={fee === 5 ? 11:5}>{fee === 5 ? 11:5} cedis</option>
                 </select>
               ) : (
                 <p className="text-green-900 mt-1">{fee} cedis</p>
