@@ -7,9 +7,12 @@ export const AddStudent=()=>{
     const[defaultFee,setDefaultFee]=useState(0)
     const [loading,setLoading]=useState(false)
     const [success,setSuccess]=useState("")
+    const [error,setError]=useState("")
+
     const {class_id ,class_name}=useParams()
 
     const handleSubmmit=async(e)=>{
+      if(!fullName || !defaultFee) return setError("Please fill all options")
 
         const data={
           selectedClassId:class_id,
@@ -109,6 +112,12 @@ export const AddStudent=()=>{
               {success}
             </p>
             )}
+
+            {error && (
+            <p className="text-red-500 text-sm mt-2 bg-red-100 p-2 rounded">
+              {error}
+            </p>
+          )}
     
           </div>
     
