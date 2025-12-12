@@ -10,7 +10,7 @@ export default function LandingPage() {
   const [loading,setLoading]=useState(false)
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useEffect(() => { 
     setLoading(true)
     if (isAuthenticated()) {
       const role = localStorage.getItem("role");
