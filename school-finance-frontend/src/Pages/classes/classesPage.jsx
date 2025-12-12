@@ -8,6 +8,25 @@ export  const Classes=()=> {
   const [classes, setClasses] = useState([]);
   const [loading,setLoading]=useState(false)
 
+    useEffect(() => { 
+      setLoading(true)
+      if (isAuthenticated()) {
+        const role = localStorage.getItem("role");
+    
+        const redirectMap = {
+          teacher: "/classes",
+          accountant: "/accountant-dashboard",
+          head: "/head-dashboard",
+        };
+    
+        navigate(redirectMap[role] || "/classes", { replace: true });
+        setLoading(false)
+      }else{
+        navigate("/")
+      }
+      setLoading(false)
+    }, []);
+
   useEffect(()=>{
     const getAllClasses=async()=>{
       setLoading(true)

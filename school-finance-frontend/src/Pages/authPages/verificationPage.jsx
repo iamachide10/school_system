@@ -15,21 +15,6 @@ const EmailVerification = () => {
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-    setLoading(true)
-    if (isAuthenticated()) {
-      const role = localStorage.getItem("role");
-      const redirectMap = {
-        teacher: "/classes",
-        accountant: "/accountant-dashboard",
-        head: "/head-dashboard",
-      };
-      navigate(redirectMap[role] || "/classes", { replace: true });
-      setLoading(false)
-    }
-    setLoading(false)
-  }, []);
-  
 
   useEffect(() => {
     const verifyToken = async () => {
