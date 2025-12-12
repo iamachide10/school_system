@@ -1,5 +1,8 @@
 import { useState ,useEffect} from "react"
 import FullScreenLoader from "../../components/loader"
+import { useNavigate } from "react-router-dom"
+import { isAuthenticated } from "../../context/authContext"
+
 
 const SignUp=()=>{
     const [name,setName]=useState("")
@@ -12,6 +15,25 @@ const SignUp=()=>{
     const [loading,setLoading]=useState(false)
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+      setLoading(true)
+      if (isAuthenticated()) {
+        const role = localStorage.getItem("role");
+
+        const redirectMap = {
+          teacher: "/classes",
+          accountant: "/accountant-dashboard",
+          head: "/head-dashboard",
+        };
+
+        navigate(redirectMap[role] || "/classes", { replace: true });
+        setLoading(false)
+      }
+      setLoading(false)
+    }, []);
 
 
     useEffect(()=>{

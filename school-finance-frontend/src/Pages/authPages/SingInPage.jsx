@@ -3,6 +3,9 @@ import { useState,useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
 import { isAuthenticated } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
+const navigate = useNavigate();
+
 
 
 
@@ -19,25 +22,23 @@ export default function LoginForm() {
 
 
 
-  useEffect(() => {
-    setLoading(true)
-    if (isAuthenticated()) {
-      const role = localStorage.getItem("role");
-      if (role === "teacher") {
-        setLoading(false)
-        window.location.href = "/classes";
-      } else if (role === "accountant") {
-        setLoading(false)
-        window.location.href = "/accountant-dashboard";
-      } else {
-        setLoading(false)
-        window.location.href = "/head-dashboard";
-      }
-    }
-    setLoading(false)
-  }, []);
+useEffect(() => {
+  setLoading(true)
+  if (isAuthenticated()) {
+    const role = localStorage.getItem("role");
 
-  
+    const redirectMap = {
+      teacher: "/classes",
+      accountant: "/accountant-dashboard",
+      head: "/head-dashboard",
+    };
+
+    navigate(redirectMap[role] || "/classes", { replace: true });
+    setLoading(false)
+  }
+  setLoading(false)
+}, []);
+
   
 
   const {login}=useAuth()

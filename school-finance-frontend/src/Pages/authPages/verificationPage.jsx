@@ -1,13 +1,35 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import { isAuthenticated } from "../../context/authContext";
+import FullScreenLoader from "../../components/loader";
 
 
 const EmailVerification = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const {login}=useAuth()
+  const [loading,setLoading]=useState(false)
   const [status, setStatus] = useState("loading"); 
+
+
+
+
+  useEffect(() => {
+    setLoading(true)
+    if (isAuthenticated()) {
+      const role = localStorage.getItem("role");
+      const redirectMap = {
+        teacher: "/classes",
+        accountant: "/accountant-dashboard",
+        head: "/head-dashboard",
+      };
+      navigate(redirectMap[role] || "/classes", { replace: true });
+      setLoading(false)
+    }
+    setLoading(false)
+  }, []);
+  
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -33,6 +55,8 @@ const EmailVerification = () => {
 
     verifyToken();
   }, [token]);
+
+  if(loading) return <FullScreenLoader/>
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-white p-4">
