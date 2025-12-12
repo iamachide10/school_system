@@ -3,21 +3,25 @@ import FullScreenLoader from "../../components/loader";
 import { useParams } from "react-router-dom";
 
 export const AddStudent=()=>{
-    const [fullName,setFullName]=useState("")
-    const[defaultFee,setDefaultFee]=useState(0)
-    const [loading,setLoading]=useState(false)
-    const [success,setSuccess]=useState("")
-    const [error,setError]=useState("")
-
-    const {class_id ,class_name}=useParams()
-
-    const handleSubmmit=async(e)=>{
-      if(!fullName || !defaultFee) return setError("Please fill all options")
-
-        const data={
-          selectedClassId:class_id,
-          defaultFee,
-          fullName
+  const [fullName,setFullName]=useState("")
+  const[defaultFee,setDefaultFee]=useState(0)
+  const [loading,setLoading]=useState(false)
+  const [success,setSuccess]=useState("")
+  const [error,setError]=useState("")
+  
+  const {class_id ,class_name}=useParams()
+  
+  const handleSubmmit=async(e)=>{
+    setLoading(true)
+    if(!fullName || !defaultFee){
+      setSuccess("")
+      return setError("Please fill all options") 
+    } 
+      
+      const data={
+        selectedClassId:class_id,
+        defaultFee,
+        fullName
         }
 
         console.log(data);
@@ -26,16 +30,16 @@ export const AddStudent=()=>{
 
         const options={
           method:"POST",
-           headers:{
+          headers:{
                 "Content-Type":"application/json"
             },
           body:JSON.stringify(data)
         }
-        setLoading(true)
         try{
           const res=await fetch(url ,options)
           if(res.ok){
             setLoading(false)
+            setError("")
             setSuccess("Student added successfully")
           }
         }catch(e){
