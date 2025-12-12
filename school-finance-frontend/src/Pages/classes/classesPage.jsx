@@ -4,6 +4,7 @@ import { ClassCard } from "../../components/classCard";
 import FullScreenLoader from "../../components/loader";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../../context/authContext";
+import { useAuth } from "../../context/authContext";
 
 
 export  const Classes=()=> {
@@ -11,14 +12,15 @@ export  const Classes=()=> {
   const [classes, setClasses] = useState([]);
   const [loading,setLoading]=useState(false)
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  
+  
+  useEffect(() => { 
+    setLoading(true)
+    if (isAuthenticated()) {
+        const {role}=useAuth()
 
-
-    useEffect(() => { 
-      setLoading(true)
-      if (isAuthenticated()) {
-        const role = localStorage.getItem("role");
-    
+        console.log(role);
         const redirectMap = {
           teacher: "/classes",
           accountant: "/accountant-dashboard",
@@ -59,7 +61,7 @@ export  const Classes=()=> {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white p-6">
-      <h1 className="text-4xl font-bold text-green-700 text-center mb-10">
+      <h1 className="mt-[5rem] text-4xl font-bold text-green-700 text-center mb-10">
         All Classes
       </h1>
 

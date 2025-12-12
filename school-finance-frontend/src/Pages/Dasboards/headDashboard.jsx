@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import FullScreenLoader from "../../components/loader";
 import { DollarSign, AlertTriangle, Users, CheckCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../../context/authContext";
+import { useAuth } from "../../context/authContext";
 
 export default function HeadmistressDashboard() {
   const [loading,setLoading]=useState(false)
@@ -9,6 +12,27 @@ export default function HeadmistressDashboard() {
     month: 0,
     pending: 0,
   }); 
+
+
+
+    const navigate = useNavigate()
+  
+    useEffect(() => {
+      setLoading(true)
+      if (isAuthenticated()) {
+        const {role}=useAuth()
+    
+        const redirectMap = {
+          teacher: "/classes",
+          accountant: "/accountant-dashboard",
+          head: "/head-dashboard",
+        };
+    
+        navigate(redirectMap[role] || "/classes", { replace: true });
+        setLoading(false)
+      }
+      setLoading(false)
+    }, []);
 
   useEffect(() => {
     const fetchStats = async () => {

@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
 const [user, setUser] = useState("")
 const [token, setToken] = useState("")
 const [userId, setUserId] = useState("")
+const [role,setRole]=useState(role)
 
 const login = (userData) => {
 console.log(userData.existingUser.id)
@@ -38,18 +39,20 @@ useEffect(() => {
 const storedUser = localStorage.getItem("user")
 const storedId = localStorage.getItem("user_id")
 const storedToken = localStorage.getItem("token")
+const storedRole = localStorage.getItem("role")
 
 
 if (storedUser && storedToken) {
   setUser(storedUser)
   setToken(storedToken)
   setUserId(storedId)
+  setRole(storedRole)
 }
 
 }, [])
 
 return (
-<AuthContext.Provider value={{ user, token, login, logOut, userId }}>
+<AuthContext.Provider value={{ user, token, login, logOut, userId,role }}>
 {children}
 </AuthContext.Provider>
 )

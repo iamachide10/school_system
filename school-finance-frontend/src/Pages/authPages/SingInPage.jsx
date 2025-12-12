@@ -18,6 +18,7 @@ export default function LoginForm() {
   const [unverifiedEmail,setUnverifiedEmail]=useState("")
   
   const navigate = useNavigate();
+  const {login}=useAuth()
 
 
 
@@ -25,7 +26,7 @@ export default function LoginForm() {
 useEffect(() => {
   setLoading(true)
   if (isAuthenticated()) {
-    const role = localStorage.getItem("role");
+    const {role}=useAuth()
 
     const redirectMap = {
       teacher: "/classes",
@@ -41,7 +42,6 @@ useEffect(() => {
 
   
 
-  const {login}=useAuth()
 
  const handleSubmit = async (e) => {
   e.preventDefault();

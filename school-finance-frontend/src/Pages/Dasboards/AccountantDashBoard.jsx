@@ -2,11 +2,35 @@ import { useEffect, useState } from "react";
 //import { Card, CardContent } from "@/components/ui/card";
 import SessionCard from "../../components/sessionCard";
 import FullScreenLoader from "../../components/loader";
+import { isAuthenticated } from "../../context/authContext";
+import { useAuth } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 export default function AccountDashboard() {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    setLoading(true)
+    if (isAuthenticated()) {
+      const {role}=useAuth()
+  
+      const redirectMap = {
+        teacher: "/classes",
+        accountant: "/accountant-dashboard",
+        head: "/head-dashboard",
+      };
+  
+      navigate(redirectMap[role] || "/classes", { replace: true });
+      setLoading(false)
+    }
+    setLoading(false)
+  }, []);
+  
+    
 
 
   useEffect(() => {
