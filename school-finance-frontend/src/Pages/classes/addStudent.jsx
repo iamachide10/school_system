@@ -15,6 +15,7 @@ export const AddStudent=()=>{
     setLoading(true)
     if(!fullName || !defaultFee){
       setSuccess("")
+      setLoading(false)
       return setError("Please fill all options") 
     } 
       
