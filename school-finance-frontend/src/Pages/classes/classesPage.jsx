@@ -2,11 +2,17 @@
 import { useEffect, useState } from "react";
 import { ClassCard } from "../../components/classCard";
 import FullScreenLoader from "../../components/loader";
+import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../../context/authContext";
+
 
 export  const Classes=()=> {
     //localStorage.removeItem("token");
   const [classes, setClasses] = useState([]);
   const [loading,setLoading]=useState(false)
+
+    const navigate = useNavigate();
+
 
     useEffect(() => { 
       setLoading(true)
@@ -22,6 +28,7 @@ export  const Classes=()=> {
         navigate(redirectMap[role] || "/classes", { replace: true });
         setLoading(false)
       }else{
+        setLoading(false)
         navigate("/")
       }
       setLoading(false)
