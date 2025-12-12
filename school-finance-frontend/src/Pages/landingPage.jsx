@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from "react";
-import { isAuthenticated } from "../../context/authContext";
+import { isAuthenticated } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import FullScreenLoader from "../../components/loader";
 
 
 
@@ -28,7 +29,7 @@ export default function LandingPage() {
   
     
 
-  
+  if(loading) return  <FullScreenLoader /> ;
 
 
 
