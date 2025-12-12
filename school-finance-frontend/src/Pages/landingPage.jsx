@@ -1,8 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
+import { isAuthenticated } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
+
 
 
 
 export default function LandingPage() {
+  const [loading,setLoading]=useState(false)
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setLoading(true)
+    if (isAuthenticated()) {
+      const role = localStorage.getItem("role");
+  
+      const redirectMap = {
+        teacher: "/classes",
+        accountant: "/accountant-dashboard",
+        head: "/head-dashboard",
+      };
+  
+      navigate(redirectMap[role] || "/classes", { replace: true });
+      setLoading(false)
+    }
+    setLoading(false)
+  }, []);
+  
+    
+
+  
+
 
 
   return (
