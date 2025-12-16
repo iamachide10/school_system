@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
 import BACKEND_URL from "../../utils/backend";
+import { apiFetch } from "../../utils/apiFetch";
 
 
 
@@ -71,12 +72,11 @@ const filteredStudents = students.filter((s) =>
   const loadStudents = async() => {
       setLoading(true);
       try{
-          const res= await fetch(`${BACKEND_URL}/api/student/get_class_students/${class_id}` ,
+          const res= await apiFetch(`/student/get_class_students/${class_id}` ,
             { 
               method:"POST",
               headers:{
                   "Content-Type":"application/json",
-                  "Authorization" :`Bearer ${token}`
               },
             }
           )

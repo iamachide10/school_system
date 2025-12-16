@@ -30,6 +30,7 @@ const EmailVerification = () => {
           // OPTIONAL: auto login here if you want
           // navigate("/dashboard")
         } else {
+          console.log(res);
           setStatus("error"); 
         }
       } catch (err) {
