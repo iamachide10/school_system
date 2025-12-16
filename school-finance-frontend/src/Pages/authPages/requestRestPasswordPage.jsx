@@ -8,7 +8,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setLoading(true)
     try{
-      const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/request-reset", {
+      const res =await fetch(`${BACKEND_URL}/api/users/request-reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

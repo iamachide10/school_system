@@ -4,6 +4,7 @@ import { DollarSign, AlertTriangle, Users, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../../context/authContext";
 import { useAuth } from "../../context/authContext";
+import BACKEND_URL from "../../utils/backend";
 
 export default function HeadmistressDashboard() {
   const [loading,setLoading]=useState(false)
@@ -38,7 +39,9 @@ export default function HeadmistressDashboard() {
     const fetchStats = async () => {
       setLoading(true)
       try {
-        const res = await fetch("https://school-system-backend-78p1.onrender.com/admin/dashboard/summary");
+        const res = await fetch(
+          `${BACKEND_URL}/admin/dashboard/summary`
+        );
         const data = await res.json();
         console.log(data);
         

@@ -37,14 +37,14 @@ export const registerUser = async (req, res) => {
       token
     );
 
-    await sendEmail(
-      email,
-      "Verify your School System account",
-      "Please verify your email address",
-      name,
-      token,
-      "verifyEmail"
-    );
+    // await sendEmail(
+    //   email,
+    //   "Verify your School System account",
+    //   "Please verify your email address",
+    //   name,
+    //   token,
+    //   "verifyEmail"
+    // );
 
     console.log("User created successfully. Verification email sent.");
 
@@ -77,6 +77,8 @@ export const registerUser = async (req, res) => {
 
 
 export const logUser = async (req, res) => {
+  console.log("Logging in");
+  
   const { email, password } = req.body.data;
 
   try {
@@ -103,13 +105,13 @@ export const logUser = async (req, res) => {
     }
 
     // 3. CHECK EMAIL VERIFICATION
-    if (!existingUser.verified) {
-      console.log("Unverified account");
-      return res.status(401).json({
-        status: "unverified",
-        message: "Please verify your email before logging in."
-      });
-    }
+    // if (!existingUser.verified) {
+    //   console.log("Unverified account");
+    //   return res.status(401).json({
+    //     status: "unverified",
+    //     message: "Please verify your email before logging in."
+    //   });
+    // }
 
     // 4. USER VERIFIED → ISSUE TOKENS
     const id = existingUser.id;

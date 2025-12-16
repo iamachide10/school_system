@@ -1,4 +1,7 @@
 import { useState } from "react"
+import BACKEND_URL from "../../utils/backend"
+
+
 
 export  const CreateClass=()=>{
     const [className, setClassName]=useState("")
@@ -10,7 +13,8 @@ export  const CreateClass=()=>{
         className,
         classNumber
         }
-        const url= "https://school-system-backend-78p1.onrender.com/api/classes/create_class"
+      
+        const url= `${BACKEND_URL}/api/classes/create_class`
 
         const option={
             method:"POST",

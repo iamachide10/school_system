@@ -28,6 +28,7 @@ export const emailVerificationController=async(req,res)=>{
         await saveRefreshToken(existingUser.id,tokenHash,tokenPrefix,existingUser.role)
         console.log(existingUser); 
         existingUser.token=tokensAccess;
+        
               res.cookie("refreshToken", refreshToken, {
                     httpOnly: true,      // JS cannot read it
                     secure: false,       // change to true in production with HTTPS

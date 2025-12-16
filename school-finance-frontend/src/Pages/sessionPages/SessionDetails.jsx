@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FullScreenLoader from "../../components/loader";
+import BACKEND_URL from "../../utils/backend";
 
 export default function SessionDetails() {
   const { session_id } = useParams();
@@ -12,7 +13,7 @@ export default function SessionDetails() {
   useEffect(() => {
     const fetchSessionDetails = async () => {
       try {
-        const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${session_id}/records`);
+        const res = await fetch(`${BACKEND_URL}/api/session/${session_id}/records`);
         const data = await res.json();
         if (res.ok) setStudents(data.result || data); // adapt to your backend
       } catch (err) {
@@ -28,7 +29,7 @@ export default function SessionDetails() {
   const handleConfirm = async () => {
     setConfirming(true);
     try {
-      const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${session_id}/confirm`)
+      const res = await fetch(`${BACKEND_URL}/api/session/${session_id}/confirm`)
       if (res.ok) {
         alert("Session confirmed!");
         window.location.href="/accountant-dashboard"

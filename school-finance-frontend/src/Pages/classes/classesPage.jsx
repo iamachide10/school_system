@@ -5,6 +5,7 @@ import FullScreenLoader from "../../components/loader";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../../context/authContext";
 import { useAuth } from "../../context/authContext";
+import BACKEND_URL from "../../utils/backend";
 
 
 export  const Classes=()=> {
@@ -41,7 +42,7 @@ export  const Classes=()=> {
       setLoading(true)
       try{
 
-        const result =await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
+        const result =await fetch(`${BACKEND_URL}/api/classes/getallclasses`)
   
         const data = await result.json()
         if(result.ok){

@@ -4,7 +4,7 @@ import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
 import { isAuthenticated } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
-
+import BACKEND_URL from "../../utils/backend";
 
 
 
@@ -53,7 +53,7 @@ useEffect(() => {
   setError("");
   setSuccess("");
 
-  const url = "https://school-system-backend-78p1.onrender.com/api/users/login";
+  const url = `${BACKEND_URL}/api/users/login`
 
   const options = {
     method: "POST",

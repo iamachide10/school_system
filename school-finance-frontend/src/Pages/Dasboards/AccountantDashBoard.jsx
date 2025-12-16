@@ -5,6 +5,8 @@ import FullScreenLoader from "../../components/loader";
 import { isAuthenticated } from "../../context/authContext";
 import { useAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
+import BACKEND_URL from "../../utils/backend";
+
 
 export default function AccountDashboard() {
   const [sessions, setSessions] = useState([]);
@@ -41,7 +43,7 @@ export default function AccountDashboard() {
   const fetchPendingSessions = async () => {
     setLoading(true)
     try {
-      const res = await fetch("https://school-system-backend-78p1.onrender.com/api/session/get_pending_session");
+    const res = await fetch(`${BACKEND_URL}/api/session/get_pending_session`);
       const data = await res.json();
 
       if (data.result) {

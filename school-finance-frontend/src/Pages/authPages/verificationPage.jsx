@@ -19,7 +19,7 @@ const EmailVerification = () => {
     const verifyToken = async () => {
       
       try {
-        const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/users/verify_email/${token}`)
+        const res = await fetch(`${BACKEND_URL}/api/users/verify_email/${token}`)
         const data = await res.json();
         if (res.ok) {
           setStatus("success");

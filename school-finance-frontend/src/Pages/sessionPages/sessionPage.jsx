@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
+import BACKEND_URL from "../../utils/backend";
+
+
 
 export const SessionPage = () => {
   const { class_id, teacher_id } = useParams();
@@ -12,7 +15,7 @@ export const SessionPage = () => {
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-   const {token}=useAuth()
+  const {token}=useAuth()
 
 
 const filteredStudents = students.filter((s) =>
@@ -26,7 +29,7 @@ const filteredStudents = students.filter((s) =>
   if (!token) return;
 
   const createSession = async () => {
-    const url = "https://school-system-backend-78p1.onrender.com/api/session/start_session";
+    const url = `${BACKEND_URL}/api/session/start_session`;
     const options = {
       method: "POST",
       headers: {
@@ -68,7 +71,7 @@ const filteredStudents = students.filter((s) =>
   const loadStudents = async() => {
       setLoading(true);
       try{
-          const res= await fetch(`https://school-system-backend-78p1.onrender.com/api/student/get_class_students/${class_id}` ,
+          const res= await fetch(`${BACKEND_URL}/api/student/get_class_students/${class_id}` ,
             { 
               method:"POST",
               headers:{
@@ -111,7 +114,7 @@ const handleSubmit = async () => {
     default_fees: Number(s.default_fees)
   }));
 
-  const url = "https://school-system-backend-78p1.onrender.com/api/session/submit_session";
+  const url =`${BACKEND_URL}/api/session/submit_session`;
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -146,7 +149,7 @@ const handleSubmit = async () => {
   setLoading(true);
 
   try {
-    const res = await fetch(`https://school-system-backend-78p1.onrender.com/api/session/${sessionId}/records`);
+    const res = await fetch(`${BACKEND_URL}/api/session/${sessionId}/records`);
     const data = await res.json();
 
     // 🔥 If session has records → use them
@@ -184,7 +187,7 @@ const handleSubmit = async () => {
   // FINISH SESSION (temporary empty logic)
 const handleFinishSession =async () => {
     const sessionCode = prompt(`Enter session closing code: ${closingCode}`)
-    const url = "https://school-system-backend-78p1.onrender.com/api/session/finish_session";
+    const url = `${BACKEND_URL}/api/session/finish_session`;
     
     const options = {
     method: "POST",

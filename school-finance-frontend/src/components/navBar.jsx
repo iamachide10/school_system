@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/authContext";
 import FullScreenLoader from "./loader";
+import BACKEND_URL from "../utils/backend";
 
 
 
@@ -22,7 +23,7 @@ export default function Navbar({ isLoggedIn }) {
   const linksToShow = isLoggedIn ? navLinks.private : navLinks.public;
 
   const logOutFunction=async()=>{
-    const url="https://school-system-backend-78p1.onrender.com/api/users/logout"
+    const url=`${BACKEND_URL}/api/users/logout`
     const options={
         method:"POST",
         credentials:"include",

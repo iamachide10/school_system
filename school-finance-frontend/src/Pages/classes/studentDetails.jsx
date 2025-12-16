@@ -2,7 +2,7 @@ import { useState,useEffect } from "react";
 import { Edit3, User, Layers } from "lucide-react";
 import { useParams } from "react-router-dom";
 import FullScreenLoader from "../../components/loader";
-
+import BACKEND_URL from "../../utils/backend";
 
 
 
@@ -21,7 +21,7 @@ export default function StudentProfile() {
         const fetchStudent=async()=>{
           setLoading(true)
           try{
-        const res= await fetch(`https://school-system-backend-78p1.onrender.com/api/student/get_student/${student_id}`)
+        const res=  await fetch(`${BACKEND_URL}/api/student/get_student/${student_id}`)
         const data= await res.json()
         if(res.ok){
           console.log(data);

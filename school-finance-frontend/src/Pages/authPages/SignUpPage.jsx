@@ -2,7 +2,7 @@ import { useState ,useEffect} from "react"
 import FullScreenLoader from "../../components/loader"
 import { useNavigate } from "react-router-dom"
 import { isAuthenticated } from "../../context/authContext"
-
+import BACKEND_URL from "../../utils/backend"
 
 const SignUp=()=>{
     const [name,setName]=useState("")
@@ -41,7 +41,7 @@ const SignUp=()=>{
         const getStudentsClasses=async()=>{
             setLoading(true)
             try{
-                const request= await fetch("https://school-system-backend-78p1.onrender.com/api/classes/getallclasses")
+                const request= await fetch(`${BACKEND_URL}/api/classes/getallclasses`)
                 const data= await request.json()
                 if(request.ok){
                     console.log("Data",data.result);
@@ -90,7 +90,7 @@ const onSubmit = async (e) => {
 
   try {
     const response = await fetch(
-      "https://school-system-backend-78p1.onrender.com/api/users/register",
+     `${BACKEND_URL}/api/users/register`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -7,7 +7,6 @@ export const createStudentController = async(req,res) =>{
     const {fullName,defaultFee,selectedClassId} = req.body;
   try{
     const classs= await getClassById(selectedClassId)
-    console.log(classs);
     
     const nextSeq= await getHeighestSeq(selectedClassId)
 

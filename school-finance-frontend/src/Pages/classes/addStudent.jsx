@@ -1,6 +1,7 @@
 import { useState ,useEffect} from "react";
 import FullScreenLoader from "../../components/loader";
 import { useParams } from "react-router-dom";
+import BACKEND_URL from "../../utils/backend";
 
 export const AddStudent=()=>{
   const [fullName,setFullName]=useState("")
@@ -27,7 +28,7 @@ export const AddStudent=()=>{
 
         console.log(data);
 
-        const url="https://school-system-backend-78p1.onrender.com/api/student/create_student"
+        const url=`${BACKEND_URL}/api/student/create_student`
 
         const options={
           method:"POST",
@@ -47,7 +48,6 @@ export const AddStudent=()=>{
           console.log(e);
         }
         setFullName("")
-        defaultFee(0)
         setLoading(false)
     }
 

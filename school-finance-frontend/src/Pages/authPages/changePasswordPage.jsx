@@ -52,7 +52,7 @@ useEffect(()=>{
 
     setLoading(true)
     try{
-      const res = await fetch("https://school-system-backend-78p1.onrender.com/api/users/reset_password", {
+      const res = await fetch(`${BACKEND_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ newPassword,userId})

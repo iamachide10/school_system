@@ -113,7 +113,6 @@ export const getAllPendingSessionsModel=async()=>{
     s.time, 
     (SELECT SUM(fee_amount) FROM session_records WHERE session_id=s.id AND 
     has_paid=true
-
     )AS total_amount,
     (SELECT COUNT(*) FROM session_records WHERE session_id = s.id AND has_paid=true
     )AS paid_count
@@ -139,3 +138,4 @@ try{
   console.log(e);  
 }
 }
+
