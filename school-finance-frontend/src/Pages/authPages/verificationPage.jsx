@@ -26,7 +26,6 @@ const EmailVerification = () => {
           alert("Email verified successfully!");
           console.log(data);
           login(data)
-
           // OPTIONAL: auto login here if you want
           // navigate("/dashboard")
         } else {
