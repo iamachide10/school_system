@@ -7,7 +7,11 @@ import { createAccessToken, signRefreshToken } from "../Utils/Token.js";
 
 export const emailVerificationController=async(req,res)=>{
     try{
+        console.log("Email verification");
+        
         const {token}=req.params
+        console.log("Token", token);
+        
         
         const result = await getVerificationToken(token)
         if(!result){
