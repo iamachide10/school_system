@@ -37,6 +37,8 @@ export default function Navbar({ isLoggedIn }) {
             console.log(data.message);
             logOut()
         }
+        console.log("It wasnt okay");
+        
     }catch(e){
         console.log(e);
     }

@@ -5,9 +5,9 @@ dotenv.config();
 export const sendEmail = async (to, subject, text, name, token, status) => {
   console.log("BREVO KEY" ,process.env.BREVO_API_KEY );
   console.log("FROM MAIL" ,process.env.BREVO_FROM);
-  
-  
-  const url = `https://lucas-model.onrender.com/${
+  //https://lucas-model.onrender.com
+
+  const url = `http://localhost:5173/${
     status === "verifyEmail" ? "verify_email" : "reset_password"
   }/${token}`;
 

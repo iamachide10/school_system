@@ -11,9 +11,7 @@ import { sendEmail } from "../Utils/sendEmails.js";
 
 export const registerUser = async (req, res) => {
   const { name, password, email, role, selectedClassId } = req.body;
-
   try {
-    // 1. CHECK IF USER EXISTS
     const existingUser = await getUser(email);
     if (existingUser) {
       console.log("User already exists with this email");
@@ -23,11 +21,9 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    // 2. GENERATE VERIFICATION TOKEN
     const { token, expressAt } = generateVerificationToken();
     console.log("Verification Token:", token, "Expires At:", expressAt);
 
-    // 3. CREATE USER
     const newUser = await createUser(
       password,
       email,
@@ -37,14 +33,14 @@ export const registerUser = async (req, res) => {
       token
     );
 
-    // await sendEmail(
-    //   email,
-    //   "Verify your School System account",
-    //   "Please verify your email address",
-    //   name,
-    //   token,
-    //   "verifyEmail"
-    // );
+    await sendEmail(
+      email,
+      "Verify your School System account",
+      "Please verify your email address",
+      name,
+      token,
+      "verifyEmail"
+    );
 
     console.log("User created successfully. Verification email sent.");
 
@@ -76,6 +72,7 @@ export const registerUser = async (req, res) => {
 };
 
 
+
 export const logUser = async (req, res) => {
   console.log("Logging in");
   
@@ -105,13 +102,13 @@ export const logUser = async (req, res) => {
     }
 
     // 3. CHECK EMAIL VERIFICATION
-    // if (!existingUser.verified) {
-    //   console.log("Unverified account");
-    //   return res.status(401).json({
-    //     status: "unverified",
-    //     message: "Please verify your email before logging in."
-    //   });
-    // }
+    if (!existingUser.verified) {
+      console.log("Unverified account");
+      return res.status(401).json({
+        status: "unverified",
+        message: "Please verify your email before logging in."
+      });
+    }
 
     // 4. USER VERIFIED → ISSUE TOKENS
     const id = existingUser.id;
@@ -159,6 +156,7 @@ export const logUser = async (req, res) => {
 
 
 
+
 export const getAllusersController= async (req,res)=>{
 try{
     const allStudents = await getAllUsersModel()
@@ -179,6 +177,8 @@ try{
 
 export const logOutController = async(req, res)=>{
     try{
+      console.log("Out working");
+      
     const refreshToken =req.cookies.refreshToken
     console.log("Refresh Token from cookies:", refreshToken);
 

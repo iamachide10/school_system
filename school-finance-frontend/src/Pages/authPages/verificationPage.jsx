@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
-
+import BACKEND_URL from "../../utils/backend";
 
 const EmailVerification = () => {
   const { token } = useParams();
@@ -12,15 +12,21 @@ const EmailVerification = () => {
   
   
   const navigate = useNavigate();
-
-
-
+  
+  
+  
   useEffect(() => {
     const verifyToken = async () => {
       
+      
       try {
+        console.log("Token",token);
         const res = await fetch(`${BACKEND_URL}/api/users/verify_email/${token}`)
+        console.log(res);
+        
         const data = await res.json();
+        console.log("Data",data);
+        
         if (res.ok) {
           setStatus("success");
           alert("Email verified successfully!");
@@ -36,7 +42,6 @@ const EmailVerification = () => {
         setStatus("error");
       }
     };
-
     verifyToken();
   }, [token]);
 
