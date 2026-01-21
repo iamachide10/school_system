@@ -37,7 +37,7 @@ export const getClassById=async(id)=>{
 export const updateTeacherStatus=async(class_id,teacher_name,teacher_id)=>{
     try{
         await pool.query("UPDATE classes SET teacher_name=$1 ,teacher_id=$2 WHERE id=$3" ,[teacher_name,teacher_id,class_id])
-        console.log("Worked Well!!!");
+
         
     }catch(e){
         console.log("An error occured, ",e);

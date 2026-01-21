@@ -8,13 +8,13 @@ import { generateVerificationToken } from "../Utils/Token.js";
 import { sendEmail } from "../Utils/sendEmails.js";
 
 
-
+//Controller for singing up a user
 export const registerUser = async (req, res) => {
+
   const { name, password, email, role, selectedClassId } = req.body;
   try {
     const existingUser = await getUser(email);
     if (existingUser) {
-      console.log("User already exists with this email");
       return res.status(200).json({
         status: "exists",
         message: "If an account with this email exists, you will receive further information."
@@ -22,7 +22,6 @@ export const registerUser = async (req, res) => {
     }
 
     const { token, expressAt } = generateVerificationToken();
-    console.log("Verification Token:", token, "Expires At:", expressAt);
 
     const newUser = await createUser(
       password,
@@ -42,9 +41,7 @@ export const registerUser = async (req, res) => {
       "verifyEmail"
     );
 
-    console.log("User created successfully. Verification email sent.");
-
-
+   
     if (newUser.role === "teacher") {
       await updateTeacherStatus(selectedClassId, newUser.name, newUser.id);
     }
@@ -71,10 +68,10 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
+ 
 
 export const logUser = async (req, res) => {
-  console.log("Logging in");
+  
   
   const { email, password } = req.body.data;
 
@@ -249,11 +246,8 @@ export const changePasswordController=async(req,res)=>{
 
 
 
-
-
 export const resendVerificationController = async (req, res) => {
   const { unverifiedEmail } = req.body;
-
   try {
     const user = await getUser(unverifiedEmail);
     

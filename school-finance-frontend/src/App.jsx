@@ -12,13 +12,14 @@ import Navbar from "./components/navBar"
 import { useAuth } from "./context/authContext"
 import StudentsList from "./Pages/classes/studentsList"
 import { SessionPage } from "./Pages/sessionPages/sessionPage"
-import StudentProfile from "./Pages/classes/studentDetails"
+import StudentProfile from "./Pages/classes/StudentProfile"
 import EmailVerification from "./Pages/authPages/verificationPage"
 import ForgotPassword from "./Pages/authPages/requestRestPasswordPage"
 import ResetPassword from "./Pages/authPages/changePasswordPage"
 import SessionDetails from "./Pages/sessionPages/SessionDetails"
 import HeadmistressDashboard from "./Pages/Dasboards/headDashboard"
-
+import PaySchoolFees from "./Pages/classes/PaySchoolfees"
+import StudentTransactionsPage from "./Pages/classes/studentsTrasactionsPage"
 
 export default function App() {
       const [onLog, setOnLog]=useState(false)
@@ -46,6 +47,9 @@ export default function App() {
       <Route path="/verify_email/:token" element={  <EmailVerification/>  } />
       <Route path="/classes/:id/:class_name" element={  <ClassDetails/>  } />
       {/* <Route path="/test-loader" element={  <FullScreenLoader/>  } /> */}
+      <Route path="/students/:student_id/pay-fees"element={<PaySchoolFees/>}/>
+      <Route path="/students/:student_code/transactions"element={<StudentTransactionsPage />}/>
+
 
       <Route path="/session/:session_id" element={  <SessionDetails/>  } />
       <Route path="/classes/students/:id" element={  <StudentsList/>  } />

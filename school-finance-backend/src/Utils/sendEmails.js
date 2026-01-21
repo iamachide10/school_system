@@ -1,13 +1,12 @@
 import Brevo from "@getbrevo/brevo";
 import dotenv from "dotenv";
-dotenv.config();
+
+dotenv.config(); 
 
 export const sendEmail = async (to, subject, text, name, token, status) => {
-  console.log("BREVO KEY" ,process.env.BREVO_API_KEY );
-  console.log("FROM MAIL" ,process.env.BREVO_FROM);
-  //https://lucas-model.onrender.com
 
-  const url = `https://lucas-model.onrender.com/${
+
+  const url = `${process.env.FRONTEND_URL}/${
     status === "verifyEmail" ? "verify_email" : "reset_password"
   }/${token}`;
 

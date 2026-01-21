@@ -1,20 +1,28 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useAuth } from "../context/authContext";
 import FullScreenLoader from "./loader";
 import BACKEND_URL from "../utils/backend";
 
 
 
-// Dynamic links object
+const role = localStorage.getItem("role")
+const redirectMap = {
+          teacher: "classes",
+          accountant: "accountant-dashboard",
+          headmaster: "head-dashboard",
+        };
+const href= redirectMap[role]
+
 const navLinks = {
   public: [
     { name: "Log In", href: "/signin" },
     { name: "Create Account", href: "/signup", type: "button" },
   ],
   private: [
-    { name: "Dashboard", href: "/dashboard" },
+    { name: "Dashboard", href: `/${href}` },
   ],
 };
+
 
 export default function Navbar({ isLoggedIn }) {
   const {logOut ,user} =useAuth()

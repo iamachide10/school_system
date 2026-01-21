@@ -71,9 +71,7 @@ export const getRecordsByIdModel = async (sessionId) => {
       ORDER BY s.id ASC;
     `;
     const { rows } = await pool.query(query, [sessionId]);
-
     return rows;
-        
   } catch (error) {
     console.log("getRecordsByIdModel error:", error);
     return [];
@@ -116,7 +114,7 @@ export const getAllPendingSessionsModel=async()=>{
     )AS total_amount,
     (SELECT COUNT(*) FROM session_records WHERE session_id = s.id AND has_paid=true
     )AS paid_count
-    FROM session s 
+    FROM session s
     INNER JOIN classes c ON  c.id=s.class_id
     WHERE s.finished = true AND confirmed= false
     ORDER BY s.time DESC;
@@ -138,4 +136,13 @@ try{
   console.log(e);  
 }
 }
+
+
+
+
+
+
+
+
+
 

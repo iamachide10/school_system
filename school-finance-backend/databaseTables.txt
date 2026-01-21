@@ -1,0 +1,91 @@
+CREATE TABLE IF NOT EXISTS public.classes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    class_number NUMERIC(10,0),
+    teacher_name VARCHAR(255),
+    teacher_id NUMERIC(3,0)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.refresh_tokens (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    token_hash TEXT NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    replaced_by INTEGER,
+    token_prefix TEXT,
+    user_role TEXT,
+    CONSTRAINT refresh_tokens_user_id_fkey
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS public.session (
+    id SERIAL PRIMARY KEY,
+    class_id INTEGER NOT NULL,
+    time TIMESTAMP DEFAULT now(),
+    finished BOOLEAN DEFAULT false,
+    session_code TEXT,
+    teacher_id NUMERIC(6,0),
+    confirmed BOOLEAN DEFAULT false,
+    CONSTRAINT session_class_id_fkey
+        FOREIGN KEY (class_id)
+        REFERENCES public.classes(id)
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS public.session_records (
+    id SERIAL PRIMARY KEY,
+    session_id INTEGER NOT NULL,
+    student_id INTEGER NOT NULL,
+    has_paid BOOLEAN DEFAULT false,
+    fee_amount NUMERIC(10,2),
+    CONSTRAINT session_records_session_id_fkey
+        FOREIGN KEY (session_id)
+        REFERENCES public.session(id)
+        ON DELETE CASCADE,
+    CONSTRAINT unique_ids UNIQUE (student_id, session_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password TEXT,
+    role VARCHAR(50) CHECK (role IN ('teacher', 'other', 'accountant', 'headmaster')),
+    verified BOOLEAN DEFAULT false,
+    verify_expiry TIMESTAMP,
+    verification_token TEXT
+);
+
+
+CREATE TABLE IF NOT EXISTS public.students (
+    id SERIAL PRIMARY KEY,
+    student_code VARCHAR(20) NOT NULL UNIQUE,
+    full_name VARCHAR(255),
+    default_fees NUMERIC(10,2),
+    class_id NUMERIC(10,2),
+    sequence NUMERIC(10,0),
+    phone VARCHAR(20),
+    required_fees NUMERIC(10,2) DEFAULT 360.00
+);
+
+
+CREATE TABLE IF NOT EXISTS public.student_fees_payments (
+    id SERIAL PRIMARY KEY,
+    student_id VARCHAR NOT NULL,
+    amount NUMERIC(10,2) NOT NULL,
+    payment_date TIMESTAMP DEFAULT now(),
+    payment_method VARCHAR(50),
+    notes TEXT,
+    CONSTRAINT fk_student_code
+        FOREIGN KEY (student_id)
+        REFERENCES public.students(student_code)
+        ON DELETE CASCADE
+);
+

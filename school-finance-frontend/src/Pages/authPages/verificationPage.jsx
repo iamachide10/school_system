@@ -68,17 +68,9 @@ const EmailVerification = () => {
             <p className="text-gray-600 text-sm">
               Your email has been successfully verified. You can now log in.
             </p>
-
-            {/* <button
-              onClick={() => navigate("/login")}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl text-lg font-semibold"
-            >
-              Continue to Login
-            </button> */}
           </>
         )}
 
-        {/* Error UI */}
         {status === "error" && (
           <>
             <div className="text-red-600 mx-auto text-5xl">✖</div>

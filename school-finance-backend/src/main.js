@@ -8,6 +8,7 @@ import studentRoute from "./routes/studentRoute.js"
 import sessionRouter from "./routes/sessionRoutes.js"
 import { refreshTokenController } from "./controllers/refreshTokenController.js";
 import cookieParser from "cookie-parser";
+import PaymentRoute from "./routes/paymentRoutes.js"
 
 
 const app=express();
@@ -15,8 +16,8 @@ const app=express();
 
 app.use(
   cors({
-    origin: "https://lucas-model.onrender.com", // your frontend
-    //origin:"http://localhost:5173", // your frontend
+    //origin: "https://lucas-model.onrender.com", // your frontend
+    origin:"http://localhost:5173", // your frontend
     credentials: true,               // allow cookies
   })
 );
@@ -31,6 +32,7 @@ app.use("/api/users", userRoutes)
 app.use("/api/classes", classRoutes)
 app.use("/api/student",studentRoute)
 app.use("/api/session" , sessionRouter)
+app.use("/api/payment" , PaymentRoute)
 app.use("/admin/dashboard", adminDashboardRoutes);
 app.post("/api/refresh_token", refreshTokenController)
 

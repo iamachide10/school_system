@@ -30,7 +30,7 @@ if (!refreshRes.ok) {
 }
 
 const data = await refreshRes.json()
-console.log(data);
+
 
 
 localStorage.setItem("token", data.accessToken)   // FIXED

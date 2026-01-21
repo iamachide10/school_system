@@ -61,12 +61,80 @@ export const getStudentByIdModel=async(studentId)=>{
 }
 
 
-export const updateStudentInfoModel=async(studentId,defaultFee)=>{
+
+
+
+
+export async function getStudentWithFeesModel(id) {
     try{
-        const result = await pool.query("UPDATE students SET  default_fees=$1 WHERE id=$2 RETURNING *",[defaultFee,studentId])
-        return  result.rows[0]
+
+      const res = await pool.query(
+        `SELECT 
+            s.id, s.student_code, s.full_name, s.default_fees, s.required_fees, s.class_id, s.sequence, s.phone,
+            COALESCE(SUM(p.amount),0) as total_paid
+        FROM students s
+        LEFT JOIN student_fees_payments p ON p.student_id::text = s.student_code
+        WHERE s.student_code = $1
+        GROUP BY s.id`,
+        [id]
+        );
+
+      
+        const student = res.rows[0];
+        
+        if (!student) return null;
+      
+        const feesSummary = {
+          required: Number(student.required_fees),
+          paid: Number(student.total_paid),
+          balance: Number(student.required_fees) - Number(student.total_paid),
+        };
+      
+        return { student, fees: feesSummary };
     }catch(e){
-        console.log("Error occured at Model" ,e);
+        console.log("Error at getStudentWithFeesModel" ,e);
+        
     }
 }
 
+
+export async function updateStudentModel(studentCode, fields) {
+  const updates = [];
+  const values = [];
+  let index = 1;
+
+  if (fields.full_name !== undefined) {
+    updates.push(`full_name = $${index++}`);
+    values.push(fields.full_name);
+  }
+
+  if (fields.default_fees !== undefined) {
+    updates.push(`default_fees = $${index++}`);
+    values.push(fields.default_fees);
+  }
+
+  if (fields.phone !== undefined) {
+    updates.push(`phone = $${index++}`);
+    values.push(fields.phone);
+  }
+
+  if (updates.length === 0) return null;
+
+  values.push(studentCode);
+
+  const query = `
+    UPDATE students
+    SET ${updates.join(", ")}
+    WHERE student_code = $${index}
+    RETURNING *;
+  `;
+  console.log(query);
+  
+  console.log(values);
+  
+
+  const result = await pool.query(query, values);
+  console.log(result.rows);
+  
+  return result.rows[0];
+}

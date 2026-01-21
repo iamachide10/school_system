@@ -1,5 +1,7 @@
-import createStudentModel,{getAllStudents, getClassStudentsModel, getHeighestSeq, getStudentByIdModel, getStudentsModel, updateStudentInfoModel} from "../models/studentsModels.js";
+import createStudentModel,{getAllStudents, getClassStudentsModel, getHeighestSeq, getStudentByIdModel, getStudentsModel,  updateStudentModel} from "../models/studentsModels.js";
 import { getClassById } from "../models/classesModles.js";
+import { getStudentWithFeesModel  } from "../models/studentsModels.js";
+
 
 export const createStudentController = async(req,res) =>{
   console.log(req.body);
@@ -68,6 +70,8 @@ try{
 
 
 export const getStudentByIdContoller=async(req, res)=>{
+  console.log("It working");
+  
   const {studentId}= req.params;
   try{
     const result= await getStudentByIdModel(studentId);
@@ -83,19 +87,60 @@ export const getStudentByIdContoller=async(req, res)=>{
 }
 
 
-export const updateStudentInfoController=async(req,res)=>{
-  try{
-  const { id,default_fees}=req.body;
-  console.log(req.body);
-  const result = await updateStudentInfoModel(id,default_fees)
-  if(!result){
-    return res.json({message:"Student not found."}).status(401)
+
+
+export async function getStudentWithFeesController(req, res) {
+  try {
+    const {student_id}=req.params;
+    
+    const data = await getStudentWithFeesModel(Number(student_id));
+
+    if (!data) return res.status(404).json({ message: "Student not found" });
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-  return res.json({message:"Info updated successfully."}).status(200)
-  
-
-  }catch(e){
-  console.log("Error occured at Controller",e); 
-}
 }
 
+
+export async function updateStudentController(req, res) {
+  console.log("Working")
+  try {
+    const { student_code } = req.params;
+    const { full_name, default_fees, phone } = req.body;
+
+    // Basic validation: at least one field must be provided
+    if (
+      full_name === undefined &&
+      default_fees === undefined &&
+      phone === undefined
+    ) {
+      return res.status(400).json({
+        message: "Provide at least one field to update"
+      });
+    }
+
+    const updatedStudent = await updateStudentModel(
+      student_code,
+      { full_name, default_fees, phone }
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({
+        message: "Student not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Student updated successfully",
+      student: updatedStudent
+    });
+
+  } catch (err) {
+    console.error("Update student error:", err);
+    res.status(500).json({
+      message: "Internal server error"
+    });
+  }
+}

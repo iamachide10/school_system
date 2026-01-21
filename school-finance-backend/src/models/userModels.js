@@ -20,6 +20,7 @@ export const createUser= async(password,email,role,name,verify_expiry,verificati
 }  
 
 
+
 export const getUser=async(email)=>{
     try{
         const result =await pool.query("SELECT * FROM users WHERE email=$1" ,[email])
@@ -33,7 +34,6 @@ export const getUser=async(email)=>{
         throw e
     }
 }
-
 
 
 export const getAllUsersModel=async ()=>{
