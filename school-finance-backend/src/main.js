@@ -1,3 +1,4 @@
+
 import adminDashboardRoutes from "./routes/adminRoutes.js";
 import express from "express";
 import userRoutes from "./routes/userRoutes.js"
@@ -9,6 +10,9 @@ import sessionRouter from "./routes/sessionRoutes.js"
 import { refreshTokenController } from "./controllers/refreshTokenController.js";
 import cookieParser from "cookie-parser";
 import PaymentRoute from "./routes/paymentRoutes.js"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 
 const app=express();
@@ -16,8 +20,7 @@ const app=express();
 
 app.use(
   cors({
-    //origin: "https://lucas-model.onrender.com", // your frontend
-    origin:"http://localhost:5173", // your frontend
+    origin:process.env.FRONTEND_URL ,
     credentials: true,               // allow cookies
   })
 );
