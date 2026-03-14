@@ -220,8 +220,8 @@ function ScoreTable({ classId, semester, subject, onBack }) {
       </div>
 
       {/* Table */}
-      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow overflow-hidden border border-green-100">
-        <table className="w-full border-collapse">
+      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow border border-green-100 overflow-x-auto">
+        <table className="w-full border-collapse min-w-[600px]">
           <thead className="bg-green-50 border-b border-green-200">
             <tr>
               <th className="text-left px-5 py-3 text-sm font-bold text-green-800 w-2/5">Student</th>
