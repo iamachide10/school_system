@@ -1,43 +1,40 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect ,useState} from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/authContext";
 import { apiFetch } from "../../utils/apiFetch";
 import FullScreenLoader from "../../components/loader";
 
 export default function ClassDetails() {
-  const [message,setMessage]=useState("")
-  const {userId}=useAuth()
-  const [loading,setLoading]=useState(false)
+  const [message, setMessage] = useState("")
+  const { userId } = useAuth()
+  const [loading, setLoading] = useState(false)
 
-  const { id ,class_name} = useParams();
+  const { id, class_name } = useParams();
   const navigate = useNavigate();
 
-   useEffect(() => {
-    const getClassStudents=async()=>{
+  useEffect(() => {
+    const getClassStudents = async () => {
       setLoading(true)
-  try{
-        const res= await apiFetch(`/student/get_class_students/${id}` ,
-          { 
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-            },
+      try {
+        const res = await apiFetch(`/student/get_class_students/${id}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
           }
         )
-        const data= await res.json()
-        if(!res.ok){
-          setMessage(data.message)
-        }
-      }catch(e){
+        const data = await res.json()
+        if (!res.ok) setMessage(data.message)
+      } catch (e) {
         console.log(e);
-      }  
-      setLoading(false)
       }
-      getClassStudents()
+      setLoading(false)
+    }
+    getClassStudents()
   }, [id]);
-  if(loading) return <FullScreenLoader/>
-  if(message){
-    return     <h1 className="mt-[9rem] w-full text-center text-3xl font-bold text-red-700 ">{message}</h1>
+
+  if (loading) return <FullScreenLoader />
+  if (message) {
+    return <h1 className="mt-[9rem] w-full text-center text-3xl font-bold text-red-700">{message}</h1>
   }
 
   return (
@@ -47,6 +44,7 @@ export default function ClassDetails() {
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+
         {/* Students in Class */}
         <div
           onClick={() => navigate(`/classes/students/${id}`)}
@@ -61,35 +59,49 @@ export default function ClassDetails() {
           </p>
         </div>
 
-        {/* Start Session */}
+        {/* Sessions */}
         <div
           onClick={() => navigate(`/classes/sessions/${id}/${userId}`)}
           className="cursor-pointer bg-white p-8 rounded-xl shadow hover:shadow-lg 
                      transition border border-green-100 hover:border-green-300"
         >
           <h2 className="text-2xl font-semibold text-green-700 mb-4">
-             Sessions Page
+            Sessions Page
           </h2>
           <p className="text-gray-600">
             Begin a new session and take student activity or financial records.
           </p>
         </div>
 
+        {/* Add Student */}
         <div
           onClick={() => navigate(`/classes/add_student/${id}/${class_name}`)}
           className="cursor-pointer bg-white p-8 rounded-xl shadow hover:shadow-lg 
                      transition border border-green-100 hover:border-green-300"
         >
           <h2 className="text-2xl font-semibold text-green-700 mb-4">
-             Add student 
+            Add Student
           </h2>
           <p className="text-gray-600">
-           Add a new student to this class.
+            Add a new student to this class.
           </p>
         </div>
+
+        {/* ── NEW: Record Student Scores ── */}
+        <div
+          onClick={() => navigate(`/classes/scores/${id}`)}
+          className="cursor-pointer bg-white p-8 rounded-xl shadow hover:shadow-lg 
+                     transition border border-green-100 hover:border-green-300"
+        >
+          <h2 className="text-2xl font-semibold text-green-700 mb-4">
+            Record Student Scores
+          </h2>
+          <p className="text-gray-600">
+            Enter and save class test, mid-semester, and exam scores.
+          </p>
+        </div>
+
       </div>
     </div>
   );
 }
-
-

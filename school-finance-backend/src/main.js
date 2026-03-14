@@ -11,6 +11,7 @@ import { refreshTokenController } from "./controllers/refreshTokenController.js"
 import cookieParser from "cookie-parser";
 import PaymentRoute from "./routes/paymentRoutes.js"
 import dotenv from "dotenv"
+import scoresRoute from "./routes/scoresRoute.js"
 
 dotenv.config()
 
@@ -38,6 +39,7 @@ app.use("/api/session" , sessionRouter)
 app.use("/api/payment" , PaymentRoute)
 app.use("/admin/dashboard", adminDashboardRoutes);
 app.post("/api/refresh_token", refreshTokenController)
+app.use("/api/scores", scoresRoute)
 
 
 

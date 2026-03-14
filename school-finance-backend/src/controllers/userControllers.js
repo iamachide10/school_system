@@ -10,41 +10,17 @@ import { sendEmail } from "../Utils/sendEmails.js";
 
 //Controller for singing up a user
 export const registerUser = async (req, res) => {
-
   const { name, password, email, role, selectedClassId } = req.body;
   try {
     const existingUser = await getUser(email);
     if (existingUser) {
-      return res.status(200).json({
-        status: "exists",
-        message: "If an account with this email exists, you will receive further information."
-      });
+      return res.status(200).json({status: "exists",message: "If an account with this email exists, you will receive further information."});
     }
-
     const { token, expressAt } = generateVerificationToken();
+    const newUser = await createUser(password,email,role,name,expressAt,token);
+    await sendEmail(email,"Verify your School System account","Please verify your email address",name,token,"verifyEmail");
 
-    const newUser = await createUser(
-      password,
-      email,
-      role,
-      name,
-      expressAt,
-      token
-    );
-
-    await sendEmail(
-      email,
-      "Verify your School System account",
-      "Please verify your email address",
-      name,
-      token,
-      "verifyEmail"
-    );
-
-   
-    if (newUser.role === "teacher") {
-      await updateTeacherStatus(selectedClassId, newUser.name, newUser.id);
-    }
+    if (newUser.role === "teacher") {await updateTeacherStatus(selectedClassId, newUser.name, newUser.id);}
 
 
     return res.status(200).json({
@@ -76,7 +52,6 @@ export const logUser = async (req, res) => {
   const { email, password } = req.body.data;
 
   try {
-    // 1. CHECK IF USER EXISTS
     const existingUser = await getUser(email);
 
     if (!existingUser) {
@@ -87,47 +62,40 @@ export const logUser = async (req, res) => {
       });
     }
 
-    // 2. CHECK PASSWORD
     const isValid = await bcrypt.compare(password, existingUser.password);
 
     if (!isValid) {
-      console.log("Invalid password");
       return res.status(401).json({
         status: "invalid_credentials",
         message: "Incorrect email or password."
       });
     }
 
-    // 3. CHECK EMAIL VERIFICATION
     if (!existingUser.verified) {
-      console.log("Unverified account");
       return res.status(401).json({
         status: "unverified",
         message: "Please verify your email before logging in."
       });
     }
 
-    // 4. USER VERIFIED → ISSUE TOKENS
+    
     const id = existingUser.id;
     const role = existingUser.role;
 
     const accessToken = createAccessToken({ id, role });
     const { refreshToken, tokenHash, tokenPrefix } = signRefreshToken();
 
-    // SAVE REFRESH TOKEN
     await saveRefreshToken(id, tokenHash, tokenPrefix, role);
-
-    // SET REFRESH COOKIE
-     res.cookie("refreshToken", refreshToken, {
+    
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,        // IMPORTANT ON PRODUCTION
-      sameSite: "none",    // REQUIRED for frontend-backend cross domain
+      secure: true,      
+      sameSite: "none",   
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    console.log("Login successful");
 
-    // RETURN SANITIZED USER DATA + ACCESS TOKEN
+
     return res.status(200).json({
       status: "success",
       message: "Login successful.",
@@ -136,10 +104,7 @@ export const logUser = async (req, res) => {
         name: existingUser.name,
         email: existingUser.email,
         role: existingUser.role,
-        token: accessToken
-      },
-  
-    });
+        token: accessToken},});
 
   } catch (error) {
     console.error("Login error:", error);
@@ -169,15 +134,11 @@ try{
 
 
 
-
-
-
 export const logOutController = async(req, res)=>{
     try{
       console.log("Out working");
       
     const refreshToken =req.cookies.refreshToken
-    console.log("Refresh Token from cookies:", refreshToken);
 
     if(!refreshToken){
         console.log("No refresh token found in cookies , user already logged out");
@@ -200,15 +161,15 @@ export const logOutController = async(req, res)=>{
     });
     console.log("User logged out successfully");
     return res.json({ message: "Logged out successfully" });
-
     }catch(e){
         console.error(e);
         res.status(500).json({ message: "Server error" });
-        }
+    }
 }
 
+
 export const  requestResetController= async (req,res)=>{
-try{
+try{  
     const { email } = req.body
     const existingEmail = await getUser(email)
     const name = existingEmail.name
@@ -217,31 +178,28 @@ try{
         
 
        const result= await saveResetToken(token,expressAt,existingEmail.id)
-        await sendEmail(email,"Reset Your Password",
-                        "Please click the link below to reset your password",name,token,"resetPassword")
+        await sendEmail(email,"Reset Your Password","Please click the link below to reset your password",name,token,"resetPassword")
                         
         return res.json({message:"Please check your email inbox for a password reset link."}).status(200)                  
     }else{
         return res.json({message:"User not found"}).status(400)
     }
-        }catch(e){
-            console.log(e);
+    }catch(e){
             return res.json({message:"Server error"}).status(500)
 }
-
 }
 
 export const changePasswordController=async(req,res)=>{
     try{
         const {newPassword,userId}=req.body
         const result = await changePasswordModel(userId,newPassword)
-        console.log(result);
         return res.status(200).json({message:"Password reset successful."})
-
     }catch(e){
+      console.log("Error at changePasswordController" , e)
         return res.status(500).json({message:"Server error" + e})
     }
 }
+
 
 
 
@@ -258,16 +216,7 @@ export const resendVerificationController = async (req, res) => {
     const { token ,expressAt} = generateVerificationToken();
     await saveResetToken(token, expressAt, user.id);
 
-
-    await sendEmail(
-      unverifiedEmail,
-      "Verify your School System account",
-      "Please verify your email address",
-      user.name,
-      token,
-      "verifyEmail"
-    );
-
+    await sendEmail(unverifiedEmail,"Verify your School System account","Please verify your email address",user.name,token,"verifyEmail");
        return res.status(200).json({
       status: "success",
       message: "Verification link sent successfully, Check your email to verify your account.",

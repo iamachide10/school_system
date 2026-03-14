@@ -37,11 +37,10 @@ export const emailVerificationController=async(req,res)=>{
                     httpOnly: true,      // JS cannot read it
                     secure: false,       // change to true in production with HTTPS
                     sameSite: "Strict", // CSRF protection
-                    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+                    maxAge: 7 * 24 * 60 * 60 * 1000, 
                 });
         console.log("Email verified successfully.");
         return res.status(200).json({message:"Email verified successfully.", existingUser})
-
     }catch(e){
         return res.status(500).json({message:`Error occured , ${e}`})
     }
@@ -63,5 +62,4 @@ export const restTokenVerification=async (req,res)=>{
     }catch(e){
         console.log("Server error",e);
     }
-
 }

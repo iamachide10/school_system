@@ -1,13 +1,9 @@
 export function Summary({ student, payments }) {
-  console.log(student);
-  
   const totalPaid = payments.reduce(
     (sum, p) => sum + Number(p.amount),
     0
   );
-
   const balance = Number(student.result.required_fees) - totalPaid;
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <SummaryCard label="Required Fees" value={student.result.required_fees} />

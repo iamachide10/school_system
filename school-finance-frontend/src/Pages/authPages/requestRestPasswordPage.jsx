@@ -1,9 +1,10 @@
 import { useState } from "react";
+import BACKEND_URL from "../../utils/backend"
+import FullScreenLoader from "../../components/loader";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading,setLoading]=useState(false)
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
@@ -17,13 +18,14 @@ export default function ForgotPassword() {
       if(res.ok){
         alert(data.msg);
       }
-
     }catch(e){
       console.log(e);
     }
     setLoading(false)
 
   };
+
+  if(loading) return <FullScreenLoader/>
 
   return (
     <div className="max-w-md mx-auto p-6 mt-[6rem]">

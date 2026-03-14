@@ -51,7 +51,6 @@ export default function StudentTransactionsPage() {
 
   return (
     <div className="mt-[4rem] max-w-5xl mx-auto space-y-6">
-      {/* HEADER */}
       <div>
         <h1 className="text-2xl font-bold">Transaction History</h1>
         <p className="text-gray-500">

@@ -32,7 +32,6 @@ export const refreshTokenController = async (req, res) => {
         console.log("Refresh token mismatch or already replaced");
       return res.status(403).json({ message: "Invalid refresh token" });
     }
-    console.log(isMatch);
 
     const { refreshToken, tokenHash,tokenPrefix } = signRefreshToken();
     const newRecord = await saveRefreshToken(stored.user_id, tokenHash, tokenPrefix,stored.user_role);

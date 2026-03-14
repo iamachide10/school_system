@@ -9,11 +9,12 @@ export const startSessionModel=async(teacher_id,class_id,session_code)=>{
         return result.rows[0]
     }catch(e){
         console.log(e);
-        
+        return e;   
     }
 }
 
 export const checkActiveSessionModel = async (class_id) => {
+  try{
     const query = `
         SELECT * FROM session
         WHERE class_id = $1 AND finished = false
@@ -21,6 +22,10 @@ export const checkActiveSessionModel = async (class_id) => {
     const values = [class_id];
     const result = await pool.query(query, values);
     return result.rows[0];
+  }catch(e){
+    console.log(e);
+    return e;
+  }
 };
 
 
@@ -50,6 +55,7 @@ export const submitSessionModel = async (student, session_id) => {
 
   } catch (error) {
     console.log("An Error ocurred",error);
+    return error;
   }
 };
 
@@ -134,6 +140,7 @@ try{
   return result.rows[0]
 }catch(e){
   console.log(e);  
+  return e;
 }
 }
 

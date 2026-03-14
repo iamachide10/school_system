@@ -61,10 +61,6 @@ export const getStudentByIdModel=async(studentId)=>{
 }
 
 
-
-
-
-
 export async function getStudentWithFeesModel(id) {
     try{
 
@@ -120,21 +116,15 @@ export async function updateStudentModel(studentCode, fields) {
 
   if (updates.length === 0) return null;
 
-  values.push(studentCode);
-
+  values.push(studentCode)
   const query = `
     UPDATE students
     SET ${updates.join(", ")}
     WHERE student_code = $${index}
     RETURNING *;
   `;
-  console.log(query);
   
-  console.log(values);
-  
-
   const result = await pool.query(query, values);
-  console.log(result.rows);
   
   return result.rows[0];
 }

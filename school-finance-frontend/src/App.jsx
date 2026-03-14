@@ -20,6 +20,8 @@ import SessionDetails from "./Pages/sessionPages/SessionDetails"
 import HeadmistressDashboard from "./Pages/Dasboards/headDashboard"
 import PaySchoolFees from "./Pages/classes/PaySchoolfees"
 import StudentTransactionsPage from "./Pages/classes/studentsTrasactionsPage"
+import RecordScoresPage from "./Pages/classes/RecordScoresPage"
+
 
 export default function App() {
       const [onLog, setOnLog]=useState(false)
@@ -49,8 +51,7 @@ export default function App() {
       {/* <Route path="/test-loader" element={  <FullScreenLoader/>  } /> */}
       <Route path="/students/:student_id/pay-fees"element={<PaySchoolFees/>}/>
       <Route path="/students/:student_code/transactions"element={<StudentTransactionsPage />}/>
-
-
+      <Route path="/classes/scores/:id" element={<RecordScoresPage />} />
       <Route path="/session/:session_id" element={  <SessionDetails/>  } />
       <Route path="/classes/students/:id" element={  <StudentsList/>  } />
       <Route path="/classes/sessions/:class_id/:teacher_id" element={  <SessionPage/>  } />

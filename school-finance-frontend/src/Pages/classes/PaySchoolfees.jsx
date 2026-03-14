@@ -40,8 +40,7 @@ export default function PaySchoolFees() {
         setFeesSummary(data.fees);
       } catch (err) {
         console.log(err);
-        
-        setError(err.message);
+                setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -54,12 +53,10 @@ export default function PaySchoolFees() {
 
 async function handleSubmit(e) {
   e.preventDefault();
-
   if (!amount || Number(amount) <= 0) {
     alert("Please enter a valid amount");
     return;
   }
-
   try {
     setSubmitting(true);
 
@@ -77,12 +74,10 @@ async function handleSubmit(e) {
     const data = await res.json();
 
     if (!res.ok) {
-      // Show backend error
       alert(data.message || "Payment failed");
       return;
     }
 
-    // ✅ Payment succeeded, show receipt
     const { receipt } = data;
     alert(
       `Payment Successful!\n\n` +
@@ -91,7 +86,6 @@ async function handleSubmit(e) {
       `Remaining Balance: GHS ${receipt.remaining_balance.toFixed(2)}`
     );
 
-    // ✅ Navigate to profile and replace payment page
     window.location.replace(`/students/profile/${student_id}`);
 
   } catch (err) {
