@@ -10,45 +10,47 @@ export function StudentActions({ student }) {
   const canPayFees = Number(student.personal?.default_fees) === 5;
 
   return (
-    <main className="p-6 space-y-8">
-      {/* ACTIONS */}
-      <section>
-        <h2 className="text-lg font-semibold mb-4">Student Actions</h2>
+    <main className="bg-background pt-6 pb-16 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto space-y-8 animate-fadeUp">
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* PAY FEES */}
-          <ActionCard
-            title="Pay School Fees"
-            icon="💳"
-            onClick={() =>
-              navigate(`/students/${student.personal.index_number}/pay-fees`)
-            }
-            disabled={!canPayFees}
-            helperText={
-              !canPayFees
-                ? "Fees not available for this student"
-                : undefined
-            }
-          />
+        {/* ── Quick Actions ──────────────────────── */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-1 h-5 rounded-full bg-primary" />
+            <h2 className="font-display text-lg font-bold text-text">Quick Actions</h2>
+          </div>
 
-          {/* TRANSACTION HISTORY */}
-          <ActionCard
-            title="Transaction History"
-            icon="📄"
-            onClick={() =>
-              navigate(`/students/${student.personal.index_number}/transactions`)
-            }
-            disabled={!canPayFees}
-            helperText={
-              !canPayFees
-                ? "Fees not available for this student"
-                : undefined
-            }
-          />
-        </div>
-      </section>
+          <div className="grid grid-cols-2 gap-3">
+            <ActionCard
+              title="Pay School Fees"
+              icon="💳"
+              onClick={() => navigate(`/students/${student.personal.index_number}/pay-fees`)}
+              disabled={!canPayFees}
+              helperText={!canPayFees ? "Not available for this student" : undefined}
+            />
+            <ActionCard
+              title="Transaction History"
+              icon="📄"
+              onClick={() => navigate(`/students/${student.personal.index_number}/transactions`)}
+              disabled={!canPayFees}
+              helperText={!canPayFees ? "Not available for this student" : undefined}
+            />
+          </div>
+        </section>
 
-      <ProfileTabs student={student} />
+        {/* ── Divider ────────────────────────────── */}
+        <div className="border-t border-border" />
+
+        {/* ── Profile Details ────────────────────── */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-1 h-5 rounded-full bg-primary" />
+            <h2 className="font-display text-lg font-bold text-text">Profile Details</h2>
+          </div>
+          <ProfileTabs student={student} />
+        </section>
+
+      </div>
     </main>
   );
 }
