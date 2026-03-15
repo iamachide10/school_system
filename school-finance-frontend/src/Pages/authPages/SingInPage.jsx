@@ -1,213 +1,200 @@
-
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import FullScreenLoader from "../../components/loader";
 import { isAuthenticated } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 import BACKEND_URL from "../../utils/backend";
-
-
+import {
+  AuthLayout, AuthCard, LogoMark,
+  InputField, PasswordInput,
+  StatusMessage, PrimaryButton,
+} from "../../components/ui";
 
 export default function LoginForm() {
-  const [email, setEmail]=useState("")
-  const [password,setPassword]=useState("")
-  const [loading,setLoading]=useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [showVerifyBox,setShowVerifyBox  ]=useState(false)
-  const [unverifiedEmail,setUnverifiedEmail]=useState("")
-  
+  const [showVerifyBox, setShowVerifyBox] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState("");
+
   const navigate = useNavigate();
-  const {login}=useAuth()
+  const { login } = useAuth();
 
+  useEffect(() => {
+    setLoading(true);
+    if (isAuthenticated()) {
+      const role = localStorage.getItem("role");
+      const redirectMap = {
+        teacher: "/classes",
+        accountant: "/accountant-dashboard",
+        headmaster: "/head-dashboard",
+      };
+      navigate(redirectMap[role], { replace: true });
+    }
+    setLoading(false);
+  }, []);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !password) return setError("Please enter your email and password.");
 
+    setLoading(true);
+    setError("");
+    setSuccess("");
 
-useEffect(() => {
-  setLoading(true)
-  if (isAuthenticated()) {
-    const role = localStorage.getItem("role")
-    const redirectMap = {
-      teacher: "/classes",
-      accountant: "/accountant-dashboard",
-      headmaster: "/head-dashboard",
-    };
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ data: { email, password } }),
+      });
+      const result = await res.json();
 
-    navigate(redirectMap[role] , { replace: true });
-    setLoading(false)
-  }
-  setLoading(false)
-}, []);
+      if (!res.ok) {
+        setLoading(false);
+        if (result.status === "unverified") {
+          setUnverifiedEmail(email);
+          setShowVerifyBox(true);
+          return setError("Your email is not verified. Please resend the verification email.");
+        }
+        return setError(result.message || "Invalid login details.");
+      }
 
-  
-
-
- const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  if (!email || !password) {
-    return setError("Please enter your email and password.");
-  }
-
-  setLoading(true);
-  setError("");
-  setSuccess("");
-
-  const url = `${BACKEND_URL}/api/users/login`
-
-  const options = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ data: { email, password } }),
+      login(result);
+      setSuccess("Login successful! Redirecting…");
+    } catch (err) {
+      setError("Network error. Please try again.");
+    }
+    setLoading(false);
   };
 
-  try {
-    const res = await fetch(url, options);
-    const result = await res.json();
-    console.log("Login result:", result);
-
-    // 🔥 Handle backend error messages
-    if (!res.ok) {
-      console.log(res);
-      // Unverified account
-      setLoading(false);
-      if (result.status === "unverified") {
-        setUnverifiedEmail(email)
-        setShowVerifyBox(true);
-        return setError(
-          "Your email is not verified. Please click on the button to resend verification."
-        );
-      }
-      // General errors (wrong password, user doesn't exist, etc.)
-      return setError(result.message || "Invalid login details.");
-    }
-
-    // SUCCESS → Log user in
-    login(result);
-
-    setSuccess("Login successful! Redirecting...");
-    console.log("Logged in:", result);
-
-    // Optional: Redirect after login
-  
-
-  } catch (err) {
-    console.error("Login error:", err);
-    setError("Network error. Please try again.");
-  }
-
-  setLoading(false);
-};
-
-
-const handleResend = async () => {
-  setLoading(true);
+  const handleResend = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`${BACKEND_URL}/api/users/resend_verification`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ unverifiedEmail })
+        body: JSON.stringify({ unverifiedEmail }),
       });
       const data = await res.json();
       if (!res.ok) {
-        setLoading(false);
-        setSuccess("")
-        setShowVerifyBox(false)
-        return setError(data.message || "Invalid login details.");
+        setSuccess("");
+        setShowVerifyBox(false);
+        return setError(data.message || "Something went wrong.");
       }
-      else{
-        setShowVerifyBox(false)
-        setLoading(false)
-        setError("")
-        return setSuccess(data.message)
-      }
-    } catch (e) {
-      alert("Error sending verification email");
+      setShowVerifyBox(false);
+      setError("");
+      setSuccess(data.message);
+    } catch {
+      setError("Error sending verification email.");
     }
-};
+    setLoading(false);
+  };
 
+  if (loading) return <FullScreenLoader />;
 
-
-  if(loading) return <FullScreenLoader/>;
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-white p-4">
-      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 space-y-6 border border-green-200">
-        <h2 className="text-3xl font-bold text-center text-green-700">Welcome Back</h2>
-        <p className="text-center text-gray-600 text-sm">
-          Log in to continue to your school portal.
-        </p>
-
-        <form onSubmit={e=>handleSubmit(e)} className="space-y-5">
+    <AuthLayout>
+      <AuthCard>
+        {/* Header */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <LogoMark />
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-            <input
-              onChange={e=>setEmail(e.target.value)}
-              value={email}
-              type="email"
-              placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none"
-            />
+            <h2 className="font-display text-3xl font-bold text-text">Welcome back</h2>
+            <p className="text-text-muted text-sm mt-1">Sign in to your school portal</p>
           </div>
+        </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-            <input
-              onChange={e=>setPassword(e.target.value)}
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <InputField
+            label="Email address"
+            id="email"
+            type="email"
+            placeholder="you@school.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
+
+          <div className="space-y-1">
+            <PasswordInput
+              label="Password"
+              id="password"
               value={password}
-              type="password"
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none"
+              autoComplete="current-password"
             />
+            <div className="flex justify-end pt-1">
+              <a
+                href="/forgot-password"
+                className="text-sm text-primary hover:text-primary-dark font-medium transition-colors"
+              >
+                Forgot password?
+              </a>
+            </div>
           </div>
-          {error && (
-            <p className="text-red-500 text-sm mt-2 bg-red-100 p-2 rounded">
-              {error}
-            </p>
+
+          {/* Status messages */}
+          <StatusMessage type="error" message={error} />
+          <StatusMessage type="success" message={success} />
+
+          {/* Unverified email box */}
+          {showVerifyBox && (
+            <div className="animate-slideDown rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 space-y-3">
+              <div className="flex items-start gap-2.5">
+                <svg className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <p className="text-sm text-amber-800 dark:text-amber-400 font-medium">
+                  Please verify your email address to continue.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleResend}
+                className="
+                  w-full py-2 rounded-lg text-sm font-semibold
+                  bg-amber-600 hover:bg-amber-700 text-white
+                  transition-colors duration-150 active:scale-[0.98]
+                "
+              >
+                Resend Verification Email
+              </button>
+            </div>
           )}
 
-          {success && (
-            <p className="text-green-600 text-sm mt-2 bg-green-100 p-2 rounded">
-              {success}
-            </p>
-            )}
-
-          <div className="flex justify-end mt-2">
-            <a href="/forgot-password" className="text-green-600 text-sm hover:underline">
-              Forgot Password?
-            </a>
-          </div>
-
-          {showVerifyBox && (
-          <div className="bg-yellow-100 p-4 rounded-md mt-4">
-            <button 
-              onClick={handleResend}
-              className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
-            >
-              Resend Verification Email
-            </button>
-          </div>
-            )}
-
-
-
-          <button
-            type="submit"
-            className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200"
-          >
-            Log In
-          </button>
-
-
+          <PrimaryButton loading={loading} type="submit">
+            Sign In
+          </PrimaryButton>
         </form>
 
-        <p className="text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <a href="/signup" className="text-green-700 font-semibold hover:underline">
-            Sign Up
-          </a>
-        </p>
-      </div>
-    </div>
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-card px-4 text-xs text-text-muted">Don't have an account?</span>
+          </div>
+        </div>
+
+        <a
+          href="/signup"
+          className="
+            block w-full py-2.5 text-center rounded-xl
+            border-2 border-border hover:border-primary/40
+            text-text font-semibold text-sm
+            hover:bg-primary/5 transition-all duration-200
+          "
+        >
+          Create an account
+        </a>
+      </AuthCard>
+    </AuthLayout>
   );
 }

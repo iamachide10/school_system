@@ -1,134 +1,132 @@
-import { useState ,useEffect} from "react";
+import { useState } from "react";
 import FullScreenLoader from "../../components/loader";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import BACKEND_URL from "../../utils/backend";
+import {
+  AuthLayout, AuthCard, LogoMark,
+  InputField, SelectField,
+  StatusMessage, PrimaryButton,
+} from "../../components/ui";
 
-export const AddStudent=()=>{
-  const [fullName,setFullName]=useState("")
-  const[defaultFee,setDefaultFee]=useState(0)
-  const [loading,setLoading]=useState(false)
-  const [success,setSuccess]=useState("")
-  const [error,setError]=useState("")
-  
-  const {class_id ,class_name}=useParams()
-  
-  const handleSubmmit=async(e)=>{
-    setLoading(true)
-    if(!fullName || !defaultFee){
-      setSuccess("")
-      setLoading(false)
-      return setError("Please fill all options") 
-    } 
-      
-      const data={
-        selectedClassId:class_id,
-        defaultFee,
-        fullName
-        }
+export const AddStudent = () => {
+  const [fullName, setFullName] = useState("");
+  const [defaultFee, setDefaultFee] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
-        console.log(data);
+  const { class_id, class_name } = useParams();
+  const navigate = useNavigate();
 
-        const url=`${BACKEND_URL}/api/student/create_student`
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSuccess("");
+    setError("");
 
-        const options={
-          method:"POST",
-          headers:{
-                "Content-Type":"application/json"
-            },
-          body:JSON.stringify(data)
-        }
-        try{
-          const res=await fetch(url ,options)
-          if(res.ok){
-            setLoading(false)
-            setError("")
-            setSuccess("Student added successfully")
-          }
-        }catch(e){
-          console.log(e);
-        }
-        setFullName("")
-        setLoading(false)
+    if (!fullName || !defaultFee) {
+      return setError("Please fill in all fields.");
     }
 
+    setLoading(true);
+    const data = { selectedClassId: class_id, defaultFee, fullName };
 
-    if(loading) return <FullScreenLoader/>
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-white p-4">
-        <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 space-y-6 border border-green-200">
-    
-          <h2 className="text-3xl font-bold text-center text-green-700">
-            Add New Student
-          </h2>
-    
-          <p className="text-center text-gray-600 text-sm">
-            Fill in the details below to add a student to the system.
-          </p>
-    
-          <div className="space-y-5">
-    
-            {/* Full Name */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. Ama Serwaa"
-                value={fullName}
-                onChange={e => setFullName(e.target.value)}
-                className="w-full px-4 py-2 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none"
-              />
-            </div>
-    
-            {/* Default Fees */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Default Fees
-              </label>
-              <select
-                value={defaultFee}
-                onChange={e => setDefaultFee(e.target.value)}
-                className="w-full px-4 py-2 border border-green-300 rounded-xl bg-white focus:ring-2 focus:ring-green-500 focus:outline-none"
-              >
-                <option value="">Select default fee</option>
-                <option value="11">₵11</option>
-                <option value="5">₵5</option>
-              </select>
-            </div>
-    
-            {/* Class Selection */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Class: {class_name}
-              </label>
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/student/create_student`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-            </div>
+      if (res.ok) {
+        setSuccess(`${fullName} has been added successfully.`);
+        setFullName("");
+        setDefaultFee("");
+      } else {
+        const result = await res.json();
+        setError(result.message || "Failed to add student.");
+      }
+    } catch (e) {
+      setError("Network error. Please try again.");
+      console.log(e);
+    }
+    setLoading(false);
+  };
 
-            <button
-            onClick={(e)=>handleSubmmit(e)}
-            className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200"
-          >
-            Add Student
-          </button>
+  if (loading) return <FullScreenLoader />;
 
-            {success && (
-            <p className="text-green-600 text-sm mt-2 bg-green-100 p-2 rounded">
-              {success}
+  return (
+    <AuthLayout>
+      <AuthCard>
+        {/* Header */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <LogoMark />
+          <div>
+            <h2 className="font-display text-3xl font-bold text-text">Add New Student</h2>
+            <p className="text-text-muted text-sm mt-1">
+              Registering into{" "}
+              <span className="font-semibold text-primary">{class_name}</span>
             </p>
-            )}
-
-            {error && (
-            <p className="text-red-500 text-sm mt-2 bg-red-100 p-2 rounded">
-              {error}
-            </p>
-          )}
-    
           </div>
-    
         </div>
-      </div>
-    );
-}
 
+        {/* Class badge */}
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/5 border border-primary/15">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+            <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-text-muted font-medium">Assigned Class</p>
+            <p className="text-sm font-semibold text-text">{class_name}</p>
+          </div>
+        </div>
 
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <InputField
+            label="Full Name"
+            id="fullName"
+            type="text"
+            placeholder="e.g. Ama Serwaa"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            autoFocus
+          />
+
+          <SelectField
+            label="Default Fees"
+            id="defaultFee"
+            value={defaultFee}
+            onChange={(e) => setDefaultFee(e.target.value)}
+          >
+            <option value="">— Select default fee —</option>
+            <option value="11">₵11</option>
+            <option value="5">₵5</option>
+          </SelectField>
+
+          <StatusMessage type="error" message={error} />
+          <StatusMessage type="success" message={success} />
+
+          <PrimaryButton loading={loading} type="submit">
+            Add Student
+          </PrimaryButton>
+        </form>
+
+        {/* Back link */}
+        <div className="text-center">
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-primary transition-colors font-medium"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to class
+          </button>
+        </div>
+      </AuthCard>
+    </AuthLayout>
+  );
+};

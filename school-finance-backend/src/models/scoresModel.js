@@ -32,7 +32,6 @@ export const saveScoresModel = async (class_id, subject_id, semester, scores) =>
   const client = await pool.connect()
   try {
     await client.query("BEGIN")
-
     for (const s of scores) {
       const { student_code, class_test, mid_sem, exam } = s
       await client.query(
